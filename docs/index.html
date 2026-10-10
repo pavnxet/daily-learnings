@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Learnings</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad;
+  --card:#fafafa; --mark:#204060;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff;
+         --card:#1c1c1c; --mark:#ffd479; }
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="site">
+<h1>Daily Learnings</h1>
+<p>New things learned from daily routine, and new tools explored. One page per entry.</p>
+<nav>
+<a href="https://github.com/pavnxet/daily-learnings">GitHub</a>
+<a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a>
+<a href="https://raw.githubusercontent.com/pavnxet/daily-learnings/main/README.md">Raw</a>
+</nav>
+</header>
+<h2>Entries</h2>
+<a class="card" href="tools/smailpro.html"><div class="t">SmailPro — temporary Gmail &amp; Outlook inboxes</div><div class="d">Disposable inboxes on <strong>real Gmail and Outlook addresses</strong>, which clears the domain blocklists that silently kill ordinary temp-mail verification</div><div class="m">2026-10-10</div></a>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+</body>
+</html>

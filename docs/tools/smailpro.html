@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmailPro — temporary Gmail &amp; Outlook inboxes</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad;
+  --card:#fafafa; --mark:#204060;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff;
+         --card:#1c1c1c; --mark:#ffd479; }
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>SmailPro — temporary Gmail &amp; Outlook inboxes</h1><p class="m">2026-10-10 &nbsp;·&nbsp; <a href="https://smailpro.com/temporary-email">visit site</a></p></div><div class="entry"><h2>What it is</h2>
+<p>A disposable-email service that hands out <strong>real Gmail and Outlook addresses</strong> instead of addresses on throwaway domains. It is part of the SONJJ product family (which also includes YChecker, UGener, SMSer, StoreGmail, CardGener) sharing one credit wallet.</p>
+<h2>Why it matters</h2>
+<p>The usual reason a "temp mail" address fails on a signup form is a <strong>domain blocklist</strong>. Temp-mail.com, Guerrilla Mail and Maildrop issue addresses on generic disposable domains, and signup forms blocklist those domains — so the verification mail is dropped before it is even sent. The failure is silent: no error, no bounce, just a form that never verifies. <em>(The examples of which platforms do this — Salesforce and HubSpot — come from the vendor's own page: <strong>(vendor claim — unverified)</strong>.)</em></p>
+<p>Because SmailPro issues <code>@gmail.com</code> and <code>@outlook.com</code> addresses, it clears domain-based blocklists that kill ordinary temp mail. That is the entire value proposition, and it is a real mechanism. <em>(The pool size and acceptance rates the vendor quotes are <strong>(vendor claim — unverified)</strong>; see Limits &amp; risks.)</em></p>
+<h2>How to use</h2>
+<h3>Free path (browser, manual)</h3>
+<ol><li>Open https://smailpro.com/temporary-email</li><li>Create an inbox — pick the provider (Gmail / Outlook / other).</li><li>The page gives you the address; keep the tab open.</li><li>Paste the address into the signup form, then read the code from the SmailPro inbox.</li></ol>
+<p>The Cloudflare Turnstile challenge is solved by you in the browser. There is also a Chrome/Firefox/Edge extension and an Android app.</p>
+<h3>Automation path (API)</h3>
+<p>Auth is a single <code>X-Api-Key</code> header (key from the my.sonjj.com dashboard). No OAuth, no SDK, no session cookie.</p>
+<p>Three calls:</p>
+<table><thead><tr><th>Step</th><th>Call</th></tr></thead><tbody><tr><td>1</td><td><strong>Create</strong> an inbox → returns a Gmail or Outlook address</td></tr><tr><td>2</td><td><strong>Poll</strong> the inbox for new messages (IMAP-synced every 5–10s)</td></tr><tr><td>3</td><td><strong>Read</strong> a message → full body, or extract the OTP directly</td></tr></tbody></table>
+<p>The API is <strong>receive-only by design</strong> — it cannot send mail. Cost per call: create 1 credit, poll 0.05 credits, read 1–2 credits. Base rate $1.00 / 1,000 credits, down to $0.30 / 1,000 at scale <strong>(vendor claim — unverified)</strong>; credits never expire and are only charged on an HTTP 200 <strong>(vendor claim — unverified)</strong>.</p>
+<h3>Python wrapper (unofficial)</h3>
+<p><code>pip install smailpro-api</code> — community wrapper by AsmSafone (<a href="https://pypi.org/project/smailpro-api/">PyPI</a>, <a href="https://github.com/AsmSafone/smailpro-api">GitHub</a>).</p>
+<pre><code>from smailpro_api import SmailProAPI, Provider
+
+api = SmailProAPI(provider=Provider.GOOGLE, solver_url=&quot;http://localhost:8000&quot;)
+email_info = api.create_email()
+inbox = api.fetch_inbox(email_info)          # after a short sleep
+msg = api.fetch_message(email_info, inbox&quot;messages&quot;[&quot;mid&quot;])</code></pre>
+<p><strong>Caveat</strong>: the wrapper's headline feature is "automated CAPTCHA bypass", but it does no bypassing itself — it <strong>requires</strong> an external Cloudflare Turnstile solver service (it recommends Boterdrop-Solver) running at <code>solver_url</code>. So it is not a pure-Python install; budget for a Dockerized solver.</p>
+<p>Providers the wrapper exposes:</p>
+<table><thead><tr><th>Provider</th><th>Default domain</th><th>Other domains</th></tr></thead><tbody><tr><td><code>google</code></td><td>gmail.com</td><td>googlemail.com</td></tr><tr><td><code>microsoft</code></td><td>outlook.com</td><td>hotmail.com, outlook.kr, outlook.fr, outlook.com.vn, outlook.co.id, outlook.co.th, outlook.com.ar, outlook.co.il</td></tr><tr><td><code>other</code></td><td>melbourne.edu.pl</td><td>sydney.edu.pl, tokyo.edu.pl, storegmail.net</td></tr></tbody></table>
+<h2>Limits &amp; risks</h2>
+<ul><li><strong>These inboxes are not private.</strong> A "temporary Gmail" is a credential for a mailbox the vendor created and can also access. Never use it where the mail contains anything sensitive or where account recovery matters — the address is shared infrastructure and could be reassigned.</li><li><strong>Vendor metrics are marketing.</strong> ~14,000 accounts in rotation (~3,000 Gmail + ~11,000 Outlook), "400,000+ messages received", "sub-10 second OTP delivery", "high observed acceptance" — all from SmailPro's own page <strong>(vendor claim — unverified)</strong>, self-described as <em>operational metrics, not hard guarantees</em>. No independent verification. Treat acceptance as unknown until you test it on your actual target form.</li><li><strong>Receive-only.</strong> No sending, no attachments. It cannot be used for outbound mail or to test attachment handling.</li><li><strong>Acceptance is still not guaranteed.</strong> Real Gmail/Outlook clears <em>domain</em> blocklists, but forms also use behavioral checks, phone verification, IP reputation and risk scoring. A provider-domain address does not defeat those.</li><li><strong>Terms-of-service risk.</strong> Many platforms prohibit disposable addresses for account creation. Using this to mass-create or verify accounts is a ToS violation and, depending on the service and intent, potentially fraud. This is documented here for legitimately permitted uses: QA/testing of your own signup flows, and one-off signups where the platform allows it.</li><li><strong>Paid and metered.</strong> The free browser flow is rate-limited ("Limit /" on the tool page); anything programmatic costs credits and needs an account on a second domain (<code>my.sonjj.com</code>).</li><li><strong>The docs live off-site.</strong> The <code>/api</code> page on smailpro.com deliberately contains no endpoints or code samples — the real reference is on <code>sonjj.com</code>, a different domain. Documentation, pricing and pool status can change there without notice on the page you bookmarked.</li></ul>
+<h2>Verdict</h2>
+<p><strong>Genuinely useful, but for one specific job</strong>: getting a verification mail through a form that rejects disposable domains, in cases where you are allowed to do so. The real-Gmail/Outlook mechanism is the differentiator and it solves a real, otherwise-confusing failure (silently dropped verification mail).</p>
+<p><strong>Not</strong> a privacy tool, not an anonymity tool, and not a production email provider. For automation, budget for a paid credit balance plus a separate CAPTCHA solver; if you only need an occasional code, the free browser flow is the cheaper path.</p>
+<h2>Sources</h2>
+<ul><li><a href="https://smailpro.com/temporary-email">SmailPro temporary email tool</a> — https://smailpro.com/temporary-email</li><li><a href="https://smailpro.com/api">SmailPro API overview</a> — https://smailpro.com/api</li><li><a href="https://pypi.org/project/smailpro-api/">smailpro-api on PyPI</a> — https://pypi.org/project/smailpro-api/</li><li><a href="https://github.com/AsmSafone/smailpro-api">smailpro-api on GitHub</a> — https://github.com/AsmSafone/smailpro-api</li><li><a href="https://chromewebstore.google.com/detail/temp-mail-by-smailpro/hpjiofbbhffhfeiioadkedhalpijppnk">Temp Mail by SmailPro — Chrome Web Store</a> — https://chromewebstore.google.com/detail/temp-mail-by-smailpro/hpjiofbbhffhfeiioadkedhalpijppnk</li></ul></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+</body>
+</html>

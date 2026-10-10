@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>lucky-cat-api + radio-house-api — free AI backend via OpenAI-compatible bridges</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>lucky-cat-api + radio-house-api — free AI backend via OpenAI-compatible bridges</h1><p class="m">2026-10-10</p></div><div class="entry"><h2>What it is</h2>
+<p>Two standalone Python servers that each present a <strong>free upstream AI chat site as an OpenAI-compatible REST API</strong>, so any tool that speaks the OpenAI protocol can use it with a <code>baseURL</code> change and no API key.</p>
+<table><thead><tr><th>Repo</th><th>Free upstream it wraps</th><th>Default port</th></tr></thead><tbody><tr><td><code>lucky-cat-api</code></td><td>Proton Lumo guest sessions (<code>lumo.proton.me</code>)</td><td>8000</td></tr><tr><td><code>radio-house-api</code></td><td>TryingOpen (<code>tryingopen.com</code>, by Offline Base)</td><td>8002</td></tr></tbody></table>
+<p>Both are FastAPI/Uvicorn apps with the same shape and the same endpoint surface, so one client config can point at either — and the two ports run side by side, giving a combined pool of ~24 models.</p>
+<h2>Why it matters</h2>
+<p>This is the practical answer to "how do I get an AI backend for free". Both are <strong>drop-in OpenAI replacements</strong> rather than toys: they implement streaming SSE, <code>tools</code> / <code>tool_choice</code>, and <code>reasoning_effort</code>, which is the hard part of bridging a chat website. Because they speak the standard protocol, they work with existing clients with no wrapper code:</p>
+<ul><li><strong>OpenCode</strong> — via <code>@ai-sdk/openai-compatible</code>, <code>baseURL: http://127.0.0.1:8002/v1</code> (documented and working in this setup).</li><li>Anything else accepting a custom OpenAI <code>baseURL</code> — LangChain, the <code>openai</code> SDK, Continue, Cline, LibreChat, and so on.</li></ul>
+<p>The mechanisms differ, and both are worth understanding:</p>
+<ul><li><strong><code>lucky-cat-api</code> harvests anonymous guest credentials.</strong> <code>lc_credentials.py</code> drives headless Edge/Chrome through Selenium to load the Lumo guest page, waits for an <code>AUTH-*</code> cookie, and stores the full cookie header. It auto-downloads the matching <code>msedgedriver</code> if missing, keeps up to 8 credentials, and the router rotates them and marks one depleted when its rate limit is hit. Upstream is <code>https://lumo.proton.me/api/ai/v1/chat/completions</code> with an app-version header (<code>web-lumo@2.0.2.9</code>).</li><li><strong><code>radio-house-api</code> reverse-engineers a Next.js app.</strong> It scrapes model metadata out of the site's JS chunks (<code>/_next/static/chunks/</code>) with regexes for id/name/context/price, then calls the site's private endpoints. It manages route cooldowns and failure counts, and <strong>emulates tool calls</strong> for upstreams that do not support them.</li></ul>
+<h2>How to use</h2>
+<h3>1. Run a bridge</h3>
+<pre><code>cd lucky-cat-api          # or radio-house-api
+pip install -r requirements.txt
+python lc_server.py       # radio-house-api: python rh_server.py</code></pre>
+<p>Or explicitly: <code>uvicorn lc_server:app --host 127.0.0.1 --port 8000</code> (radio-house-api uses port <strong>8002</strong>).</p>
+<h3>2. Confirm it is alive</h3>
+<p><code>GET /health</code> returns liveness <strong>plus live credential-pool stats</strong> — check this first, since an empty pool is the usual cause of failures.</p>
+<h3>3. Point a client at it</h3>
+<pre><code>from openai import OpenAI
+
+client = OpenAI(base_url=&quot;http://127.0.0.1:8000/v1&quot;, api_key=&quot;not-needed&quot;)
+resp = client.chat.completions.create(
+    model=&quot;glm-5.3&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;hello&quot;}],
+    stream=True,
+)
+for chunk in resp:
+    print(chunk.choices[0].delta.content or &quot;&quot;, end=&quot;&quot;)</code></pre>
+<h3>Endpoints (identical on both)</h3>
+<table><thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead><tbody><tr><td><code>POST</code></td><td><code>/v1/chat/completions</code></td><td>Chat completions; <code>stream: true</code> for SSE. Supports <code>tools</code>, <code>tool_choice</code>, <code>reasoning_effort</code></td></tr><tr><td><code>GET</code></td><td><code>/v1/models</code></td><td>List models</td></tr><tr><td><code>GET</code></td><td><code>/v1/models/{id}</code></td><td>Retrieve one model</td></tr><tr><td><code>GET</code></td><td><code>/health</code></td><td>Liveness + credential-pool stats</td></tr><tr><td><code>POST</code></td><td><code>/admin/reload</code></td><td>Reload <code>credentials.json</code> from disk without a restart</td></tr></tbody></table>
+<p><code>/chat/completions</code> and <code>/api/v1/chat/completions</code> are accepted as aliases of <code>/v1/chat/completions</code>, which covers clients that hardcode a different path.</p>
+<h3>Models</h3>
+<p><strong>lucky-cat-api</strong> (context reported as 130k in the README; <code>lc_router.py</code> declares 128000):</p>
+<table><thead><tr><th>ID</th><th>Upstream model</th><th>Aliases</th></tr></thead><tbody><tr><td><code>qwen3.5-122b-a10b</code></td><td><code>lumo-lite</code></td><td><code>qwen3.5</code>, <code>qwen</code></td></tr><tr><td><code>glm-5.3</code></td><td><code>lumo-max</code></td><td><code>glm5.3</code></td></tr><tr><td><code>apertus-1.5</code></td><td><code>apertus-15</code></td><td><code>apertus</code></td></tr></tbody></table>
+<p><strong>radio-house-api</strong> — 21 models, including <code>claude-sonnet-5</code> (977k), <code>gpt-5.6-terra</code> (1025k), <code>deepseek-v4-flash-0731</code> / <code>deepseek-v4-pro-0813</code> / <code>deepseek-v4.1-flash</code> (1M), <code>kimi-k3</code> (1M), <code>glm-5.3</code> / <code>glm-5.3-flash</code> (1M), <code>mimo-v2.6-flash</code> / <code>mimo-v2.6-pro</code> (1M), <code>qwen3.8-2.4t-a95b</code> (1M), <code>qwen3.8-flash</code> (1M), <code>nemotron-3-ultra-550b-a55b</code> (262k), <code>qwen3.8-27b</code>, <code>gemma-4-26b-a4b-it</code>, <code>gemma-4-31b-it</code>, <code>gpt-oss-120b</code>, <code>inkling</code> / <code>inkling-small</code>, <code>muse-glimmer-30b</code>, <code>ling-3.0-flash-vl</code>, <code>nemotron-3.5-lightning</code>. The README warns the list is not finalised.</p>
+<p><em>(These model lists, the context windows, and the rate limits quoted below are read from the repos' own READMEs and source, not independently tested. Context windows in particular are copied from the upstream sites and do not all match the code — lucky-cat-api's README says 130k while <code>lc_router.py</code> declares 128000. Verify against <code>/v1/models</code> on a running server before relying on any of them.)</em></p>
+<h2>Limits &amp; risks</h2>
+<p>This section matters more than the rest, because the "free" part is not the stable part.</p>
+<ul><li><strong>The upstream terms of service prohibit exactly this.</strong> TryingOpen's terms (effective 2026-10-03) state you must not <em>"get around the service's limits, for example with automated requests, scraping, or rotating addresses to avoid rate limits"</em> — and its service description explicitly promises <em>"free, with no account"</em> for humans. <strong><code>radio-house-api</code> is, by construction, automated requests plus credential rotation</strong> (<code>ROUTE_COOLDOWN_S</code>, failure-based route suspension, a credential pool). The terms add: <em>"We may block access from anyone who does [this], without notice."</em> So expect breakage by design, not by accident. <code>lucky-cat-api</code> takes the same approach to Proton Lumo's anonymous guest tier, and Proton sells Lumo plans where guest mode is the free limited tier.</li><li><strong>No auth on your own server.</strong> <code>/health</code> exposes credential-pool stats and <code>/admin/reload</code> reloads credentials — neither is protected. Safe bound to <code>127.0.0.1</code>, <strong>dangerous if you expose it</strong> (LAN, port-forward, tunnel, container on <code>0.0.0.0</code>): anyone reaching it gets a free model backend and your pool stats. Keep it on loopback.</li><li><strong><code>credentials.json</code> is plaintext session cookies.</strong> Treat it as a secret. It is gitignored in both repos — keep it that way, and remember a leaked <code>AUTH-*</code> cookie is an impersonatable session.</li><li><strong>Undocumented private endpoints.</strong> Both call APIs the sites never published (Lumo's <code>/api/ai/v1/...</code>, TryingOpen's internal routes). They can change or vanish with any deploy, and the browser automation can break whenever the driver or site markup changes. The Selenium path also launches a browser with <code>--ignore-certificate-errors</code> and <code>--disable-web-security</code>.</li><li><strong>Hard upstream size limits.</strong> <code>radio-house-api</code> had to enforce <code>PROMPT_CHAR_CAP = 18000</code> and compact tool schemas (<code>max_spec_len=3000</code>) because TryingOpen returns <strong>HTTP 413 above ~22,000 characters</strong>. lucky-cat-api reportedly handles 500,000+ characters via <code>lumo-max</code>.</li><li><strong>Some models are heavily throttled or degraded.</strong> <code>claude-sonnet-5</code> and <code>gpt-5.6-terra</code> are limited to roughly <strong>5 requests per 30–40 minutes</strong> and support <strong>only emulated tool calls</strong> — emulated tool calls are prompt-level impersonation, not real function calling, so reliability differs from a native tool-use API.</li><li><strong>Not for anything that matters.</strong> No SLA, no uptime guarantee, no data-handling guarantee, and free-tier models change without notice. Using this for production, commercial, or user-facing traffic is not defensible; using it to experiment locally is what it is for.</li><li><strong>Copyright/licence of the model weights is a separate matter</strong> from the site's terms, and TryingOpen's terms explicitly require you to comply with <em>"the terms or usage policies of the companies that serve the models"</em>.</li></ul>
+<h2>Verdict</h2>
+<p><strong>Genuinely useful as a free, local, OpenAI-compatible AI backend — with a clear and honest ceiling.</strong></p>
+<p>The engineering is the valuable part: both repos solve the genuinely fiddly problems (SSE streaming, tool-call translation, credential rotation, OpenAI-compatible surface) so that a client makes one config change instead of being rewritten. Together they expose ~24 current models on two localhost ports, and <code>radio-house-api</code> in particular offers 1M-context frontier models through nothing but a <code>baseURL</code> swap.</p>
+<p><strong>Use it for</strong>: local experimentation, prototyping an AI feature before paying for an API, personal tooling, and learning how OpenAI-compatible bridging works.</p>
+<p><strong>Do not use it for</strong>: anything production, commercial, user-facing, or dependent on staying up. The upstream sites' terms forbid automated access and rate-limit circumvention, and TryingOpen reserves the right to block without notice. Treat the upstream as something that will break, never as a free tier you are entitled to.</p>
+<p><strong>The honest framing</strong>: this is not "free AI" — it is a free <em>client-side bridge</em> to free-tier upstream services that do not permit automated access. The cost is that the dependency can be blocked at any time, so build nothing you would be upset to lose.</p>
+<h2>Sources</h2>
+<ul><li><a href="https://github.com/khrotu/lucky-cat-api">lucky-cat-api on GitHub</a> — https://github.com/khrotu/lucky-cat-api</li><li><a href="https://github.com/khrotu/radio-house-api">radio-house-api on GitHub</a> — https://github.com/khrotu/radio-house-api</li><li><a href="https://www.tryingopen.com/">TryingOpen — Try any open model</a> — https://www.tryingopen.com/</li><li><a href="https://www.tryingopen.com/terms">TryingOpen Terms of Service (effective 2026-10-03)</a> — https://www.tryingopen.com/terms</li><li><a href="https://lumo.proton.me/guest/">Proton Lumo — guest mode</a> — https://lumo.proton.me/guest/</li><li><a href="https://proton.me/lumo/pricing">Proton Lumo pricing (Free vs Plus)</a> — https://proton.me/lumo/pricing</li><li>Local source read for verification: <code>lc_router.py</code>, <code>lc_credentials.py</code>, <code>rh_router.py</code>, <code>rh_models.py</code>, <code>rh_credentials.py</code>, <code>README.md</code>, <code>requirements.txt</code> in both repos.</li></ul>
+<p><em>Verification note: at the time of writing, neither server was running (<code>/health</code> refused connection on ports 8000 and 8002), so every claim above comes from reading the source and the upstream sites rather than from a live request. The behaviours attributing limits (credential rotation, the 18,000-char cap, emulated tool calls) are read from the code and repo READMEs.</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

@@ -14,13 +14,14 @@ New things learned from daily routine, and new tools explored. One page per entr
 | **[docs/](docs/)** | The generated website served by GitHub Pages. Built from `tools/`, never edited by hand. |
 | **[README.md](README.md)** | This index. |
 | **[AGENTS.md](AGENTS.md)** | The logging protocol — how a new learning gets researched and written up. |
-| **[learning/](learning/)** | Research notes: conventions, decisions, session history. Not part of the site. |
+| **[learning/](learning/)** | Research notes: conventions, decisions, session history. Local only — gitignored, not part of the site or the repo. |
 
 ## Index
 
 | # | Entry | What it is | Logged |
 |---|---|---|---|
 | 1 | [SmailPro — temporary Gmail & Outlook inboxes](tools/smailpro.md) | Disposable inboxes on **real Gmail and Outlook addresses**, which clears the domain blocklists that silently kill ordinary temp-mail verification | 2026-10-10 |
+| 2 | [lucky-cat-api + radio-house-api](tools/ai-api-bridge.md) | Two local FastAPI bridges wrapping free AI chat sites (Proton Lumo, TryingOpen) into one OpenAI-compatible endpoint — ~24 models from a `baseURL` swap | 2026-10-10 |
 
 *Each entry page carries a `Summary` line; the website index is built from those lines.*
 

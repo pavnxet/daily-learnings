@@ -1,0 +1,6 @@
+# Agent memory — kept locally, never published.
+learning/
+
+# Python bytecode
+__pycache__/
+*.py[cod]

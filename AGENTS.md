@@ -1,7 +1,8 @@
 # daily-learnings Subproject Agent Instructions
 
 > **Master Protocol**: Read the master governance rules at [file:///e:/Codes/Testing/AGENTS.md](file:///e:/Codes/Testing/AGENTS.md).
-> **Local Memory & Learning**: All memory, session history, ADRs, and execution maps for this project are stored strictly inside [./learning/](./learning/):
+> **Local Memory & Learning**: All memory, session history, ADRs, and execution maps for this project are stored strictly inside [./learning/](./learning/).
+> **`learning/` IS GITIGNORED — LOCAL ONLY.** It is tracking-excluded, so it never appears on GitHub, in the Pages build, or in a fresh clone. It exists only on the machine it was written on. Keep writing to it; never expect it from a clone, and never link to it from published content (`README.md`, `tools/`, `docs/`).
 > - **Domain Knowledge & Fixes**: [./learning/learning.md](./learning/learning.md)
 > - **Architecture Decisions (ADRs)**: [./learning/DECISIONS.md](./learning/DECISIONS.md)
 > - **Execution Flow & Call Graph**: [./learning/EXECUTION_FLOW.md](./learning/EXECUTION_FLOW.md)

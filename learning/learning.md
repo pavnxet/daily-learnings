@@ -30,3 +30,7 @@ Domain knowledge and conventions for this repo. Edit in place; no duplicates.
 
 - Verified working on Windows with `python` on PATH. The generator is stdlib-only (`html`, `re`, `pathlib`) — no install step.
 - Write files as UTF-8. Entries use em dashes and en dashes; reading or writing them as anything else produces mojibake in the published HTML.
+- **Shell-quoting trap (Windows/PowerShell)**: `python -c "...re.search(r'<div class=\"entry\">...')..."` fails because PowerShell mangles nested quotes — it produced a `SyntaxError: unterminated string literal`, not a Python problem. Write a throwaway `.py` verifier file and run it instead of fighting inline quoting. Delete it afterwards.
+- **Theme persistence must be applied before the stylesheet.** Rendering the saved theme in a script at the end of `<body>` causes a flash of the system theme first. `THEME_INIT` is inlined in `<head>` ahead of `<style>` for exactly this reason. `THEME_JS` (interaction + label) is a separate script at the end of `<body>`, where the button exists.
+- **CSS custom-property overrides rely on source order, not specificity.** `:root` and `[data-theme=light]` have equal specificity (0,1,0), so the theme blocks must appear *after* the `prefers-color-scheme` media query to win. Moving them earlier silently breaks the toggle.
+- **Validate unknown JS with `node --check`** on the generated output rather than counting braces — balanced-brace checks pass on plenty of broken syntax.

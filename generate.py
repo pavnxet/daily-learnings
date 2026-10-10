@@ -22,19 +22,24 @@ DEFAULT_DATE = "2026-10-10"
 
 CSS = """
 *,*::before,*::after{box-sizing:border-box}
-:root{
-  --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad;
-  --card:#fafafa; --mark:#204060;
-}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
 @media (prefers-color-scheme:dark){
-  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff;
-         --card:#1c1c1c; --mark:#ffd479; }
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
 }
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0; background:var(--bg); color:var(--fg);
   font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
 .wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -75,6 +80,36 @@ footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
 .page-head{margin-bottom:2rem}
 .page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
 .back{font-size:.88rem}
+"""
+
+# Runs before the stylesheet so a saved theme never flashes the wrong colours first.
+THEME_INIT = """
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+"""
+
+# Two-state toggle; the icon shows the theme you would switch to.
+THEME_JS = """
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\\u2600 Light':'\\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
 """
 
 INLINE = [
@@ -280,9 +315,11 @@ def shell(title, body, back=True):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)}</title>
 <meta name="description" content="Daily learnings and tools explored.">
+<script>{THEME_INIT}</script>
 <style>{CSS}</style>
 </head>
 <body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
 <div class="wrap">
 {nav}
 {body}
@@ -290,6 +327,7 @@ def shell(title, body, back=True):
   <p><a href="{REPO}">GitHub</a> · <a href="{REPO}/blob/main/README.md">README</a> · built from markdown, no framework.</p>
 </footer>
 </div>
+<script>{THEME_JS}</script>
 </body>
 </html>
 """

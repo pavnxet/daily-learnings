@@ -25,6 +25,17 @@ Steps inside `generate.py::main`:
 
 Run: `python generate.py` → prints `built N entry page(s) + docs/index.html`.
 
+### Page shell (`shell()`)
+
+Every generated page shares one shell, so any change there lands on all pages at once:
+
+- `<script>{THEME_INIT}</script>` — in `<head>`, **before** `<style>`, applies the saved theme with no flash.
+- `<style>{CSS}</style>` — theme variables, then `[data-theme=light|dark]` overrides *after* the system-preference query.
+- `<button class="theme-toggle">` — fixed top-right, present on every page.
+- `<script>{THEME_JS}</script>` — at the end of `<body>`; toggles the theme, persists it to `localStorage`, and keeps the icon/`aria-label` in sync.
+
+Theme state lives in `document.documentElement.dataset.theme` and is absent when following the system.
+
 ## Write path for a new entry
 
 1. Research the tool deeply — see the submission protocol in `AGENTS.md` (vendor site, official docs, registry/repo, independent reviews, ToS).
@@ -41,3 +52,4 @@ Run: `python generate.py` → prints `built N entry page(s) + docs/index.html`.
 | 2026-10-10 | Repo created. `README.md`, `AGENTS.md`, `learning/` (4 files), `tools/smailpro.md`. |
 | 2026-10-10 | Added `generate.py` + `docs/` site for GitHub Pages; rewrote `README.md` as the repo summary. Public repo `pavnxet/daily-learnings` created, Pages enabled from `main`/`docs` (HTTPS), verified live. Added the new-learning submission protocol to `AGENTS.md`. |
 | 2026-10-10 | Fixed generator: `##`→`<h2>` (was `<h3>`), index card href `tools/<slug>.html` (was root-relative and broken), vendor tags now `<strong>` and applied inline in the entry. |
+| 2026-10-10 | Added light/dark theme toggle to every page (`THEME_INIT` in head before CSS to avoid a flash, `THEME_JS` at end of body, `localStorage` persistence, system default when unset). Documented under "Theme" in `README.md`. JS validated with `node --check`. |

@@ -54,6 +54,12 @@ python generate.py     # rebuild docs/ after adding or editing an entry
 
 Minimal theme, no framework, no dependencies, works in light and dark mode. Pages is published from **`main` / `docs`**.
 
+### Theme
+
+The site follows your operating system's light/dark setting by default. A small toggle sits in the top-right corner of every page; clicking it switches theme and remembers the choice in `localStorage` across pages and visits. Clear the site's saved data (or use a private window) to fall back to following the system again.
+
+The saved theme is applied by a short inline script placed **before** the stylesheet, so a page never flashes the wrong colours before settling.
+
 ## Structure
 
 ```

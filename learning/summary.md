@@ -64,3 +64,36 @@ Append-only. Newest entries at the end. Never delete or overwrite past entries.
 - `docs/` is generated output — never hand-edit it.
 - SmailPro performance figures remain unverified vendor claims. Still no live test and no API key.
 
+---
+
+## 2026-10-10 (session 3) — Light/dark theme toggle
+
+**Task**: Add a theme toggle option to the webpage.
+
+**Actions taken**:
+- Added two scripts and a button to the shared page shell in `generate.py`, so the toggle appears on every page (index and all entry pages) automatically:
+  - `THEME_INIT` — inlined in `<head>` **before** `<style>`; applies a `localStorage`-saved theme to `document.documentElement.dataset.theme`. Placed ahead of the stylesheet so a saved dark theme never flashes light first.
+  - `THEME_JS` — at the end of `<body>` (where the button exists); flips the theme on click, persists it, and keeps the icon and `aria-label` in sync with the effective theme.
+  - `<button class="theme-toggle">` — fixed top-right, outlined pill, hidden in print via `@media print`.
+- Restructured the CSS: `--mark` was dead after the `<strong>` switch, so it was dropped; added explicit `[data-theme=light]` / `[data-theme=dark]` variable blocks **after** the `prefers-color-scheme` query, since both selectors have equal specificity and source order is what makes the explicit choice win.
+- Documented the behaviour under a new **Theme** section in `README.md` (system default, click to override, remembered, clear data to return to auto).
+
+**Files modified**:
+- `generate.py` (CSS, `THEME_INIT`, `THEME_JS`, `shell()`)
+- `README.md`
+- `learning/learning.md`, `learning/EXECUTION_FLOW.md`, `learning/summary.md`
+- Regenerated: `docs/index.html`, `docs/tools/smailpro.html`
+- Created and removed: `_verify.py`, `_theme.js` (scratch)
+
+**Verification**:
+- Both generated pages contain the button, 2 script tags, and the 2 `[data-theme=]` rule sets.
+- Head order confirmed as `script, style, /head` — init before styles.
+- Extracted the generated JS and ran `node --check` (exit 0, Node v24.19.0). Brace counting was also clean, but `node --check` is the real signal.
+- Escapes verified to survive generation as `\u2600` / `\u263D` (written `\\uXXXX` in the Python source, since f-strings — unlike the JS — do not process inner escapes).
+
+**Notes for the next session**:
+- Not verified in a real browser: the visual result, the actual no-flash behaviour on reload, and cross-page persistence are confirmed at the HTML/JS level only. If any doubt, open the Pages URL and toggle it.
+- The toggle is deliberately two-state. The system preference is only followed until the first click; there is no on-page control to return to auto (clearing site data does it). Adding a third "auto" state was skipped as unnecessary.
+- `theme-toggle` uses `position:fixed`, which is fine at the ~46rem content width but would overlap content on a very narrow viewport.
+
+

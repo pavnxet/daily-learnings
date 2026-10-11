@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Intelligence X (intelx.io) — OSINT search engine for leaks and historical web data</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>Intelligence X (intelx.io) — OSINT search engine for leaks and historical web data</h1><p class="m">2026-10-10 &nbsp;·&nbsp; <a href="https://intelx.io/">visit site</a></p></div><div class="entry"><h2>What it is</h2>
+<p>A search engine for leaked, archived and historical data, run by Intelligence X. It indexes more than <strong>200 billion records</strong> across paste sites (including historical ones), darknet (Tor and I2P), WikiLeaks and Cryptome, government sites of North Korea and Russia, data leaks, WHOIS, and a "Dumpster" bucket for everything else.</p>
+<p>The important thing to understand is that <strong>it does not do full-text search</strong>. You cannot search "John Doe" or "American Airlines" — those return an error. You search by <strong>selector</strong>, and it supports an unusually wide set: email address, domain (with wildcards like <code>*.example.com</code>), URL, IP/CIDR (IPv4 and IPv6), phone number, Bitcoin and Ethereum addresses, MAC address, IPFS hash, credit card number, SSN, IBAN, and internal types like UUID and SimHash.</p>
+<h2>Why it matters</h2>
+<p>Two features make it more than a breach-lookup site:</p>
+<ul><li><strong>The Phonebook.</strong> When you only have a domain, Phonebook expands it into the underlying email addresses, URLs and domains — the classic "I have a company, I need a person" step. It runs at <code>phonebook.cz</code> and is a paid-tier feature.</li><li><strong>Historical copies.</strong> Like a Wayback Machine for leaked and archived documents, you can go back in time on a site or document, which is what makes it useful for investigating content that has since been taken down.</li></ul>
+<p>It also handles the practical side: inline preview of archived HTML, PDFs and Word files (viewable without leaving the site, including darknet content), statistics filters by bucket/type/date, CSV/ZIP export, and email alerts.</p>
+<p><strong>The Identity Portal</strong> is the separate product for serious work — it lists every line where a search term appears rather than previewing whole files, exports leaked accounts as CSV with password-type/hash analysis, and adds reverse lookup and stealer-log export.</p>
+<h2>How to use</h2>
+<ol><li><strong>Sign up</strong> at https://intelx.io/signup. Unregistered visitors get only a couple of searches a day and cannot see most data, so an account is the real starting point.</li><li><strong>Pick a strong selector.</strong> Reconnaissance first. A domain, email, IP or crypto address works; a person's name does not.</li><li><strong>Use Phonebook</strong> when you have a domain but not an address.</li><li><strong>Filter with the statistics panel</strong> (top-left after searching) or the Advanced menu, rather than scrolling results.</li><li><strong>Automate or alert.</strong> There is a documented <a href="https://help.intelx.io/api/">Search API</a> — but note the licence terms below before building on it. Alerts arrive daily/weekly/monthly; monthly is recommended because newly indexed results are backdated.</li></ol>
+<h3>Tiers</h3>
+<table><thead><tr><th>Tier</th><th>Selector searches</th><th>Phonebook</th><th>Notes</th></tr></thead><tbody><tr><td>Public (not logged in)</td><td>2 / day</td><td>—</td><td>Much data hidden</td></tr><tr><td><strong>Free (signed up)</strong></td><td><strong>50 / day</strong></td><td>—</td><td>No download, no export, no API access</td></tr><tr><td>Academia</td><td>50 / day</td><td>25 / day</td><td>For universities and schools</td></tr><tr><td>Free Trial (7 days)</td><td>50 / day</td><td>—</td><td>20 exports/day, download enabled; <strong>downgrades to Free after 7 days</strong></td></tr><tr><td>Researcher</td><td>200 / day</td><td>25 / day</td><td>€2,500 / year</td></tr><tr><td>API</td><td>500 / day</td><td>100 / day</td><td>€7,000 / year</td></tr><tr><td>Identity Portal</td><td>500 / day</td><td>100 / day</td><td>€10,000 / year — the only tier with line-by-line results, reverse lookup, stealer-log export</td></tr><tr><td>Enterprise</td><td>5000+ / day</td><td>2500+ / day</td><td>€20,000 / year, multiple users</td></tr></tbody></table>
+<p><em>(Figures read from the vendor's product page on 2026-10-10 — verify before budgeting, as tiers change.)</em></p>
+<h3>Free-tier gotchas</h3>
+<ul><li>The <strong>Free</strong> tier has <strong>no download and no export</strong> — you can look, but getting results out is the paid feature. For most real workflows the free tier is a triage tool, not a data source.</li><li><strong>Free trial does not grant API access.</strong> The API tiers are separate licences entirely.</li><li>A "license key" may be required; an account without one shows <em>"Invalid License Key"</em> on searches.</li></ul>
+<h2>Limits &amp; risks</h2>
+<ul><li><strong>Legal and ethical exposure is real.</strong> This indexes <strong>breach data and stealer logs</strong> — credentials and personal data of people who never consented. Querying is not the same as being entitled to the contents. Many jurisdictions restrict knowingly possessing or processing unlawfully obtained personal data, and "I found it in a search engine" is not a defence. Treat results as <em>indicators for verification</em>, and get legal advice before acting on leaked credentials — including before <em>testing</em> a leaked password, which can itself be unauthorised access.</li><li><strong>Do not test credentials you find.</strong> Logging into an account with a leaked password is typically a crime, regardless of how you got the password.</li><li><strong>The API is fair-use and licence-restricted.</strong> The product page defines fair use as <em>"the user shall not engage in usage of the API that goes against our Terms of Service such as mass scraping"</em>, and states explicitly that <strong>only API, Identity Portal and Enterprise licences grant the right to integrate the API into third-party products</strong>. The Researcher and Free tiers do not. Building a product on the free tier's API is a licence breach.</li><li><strong>Free tier cannot export, so it cannot be automated meaningfully</strong> — that is by design, not an oversight.</li><li><strong>Data can be stale, duplicated or misattributed.</strong> Breach dumps are messy: records are backdated on indexing, entries repeat across buckets, and a match on an email does not prove the person used the service or that the data is current. The vendor itself recommends monthly alert cycles precisely because indexing lags.</li><li><strong>Searching a person's email or domain is a privacy-sensitive act.</strong> Depending on your role and jurisdiction this may require a lawful basis — it is not automatically fine because the tool is public.</li><li><strong>Free tier is browse-only and small.</strong> 50 selectors/day sounds generous until you realise no export means hand-copying; plan around that rather than being surprised.</li></ul>
+<h2>Verdict</h2>
+<p><strong>The strongest free-tier OSINT starting point for selector-based investigation, with a hard ceiling at "look but don't take".</strong></p>
+<p><strong>Use it for</strong>: verifying whether an email or domain appears in known breaches, expanding a domain into email addresses via Phonebook, checking your own exposure, finding historical copies of removed content, and academic/security research where you understand the legal basis.</p>
+<p><strong>Do not use it for</strong>: harvesting credentials, testing found passwords, bulk-collecting personal data, or building any product on the free/Researcher API — those are unlawful or licence-breaching respectively.</p>
+<p><strong>The honest framing</strong>: the free tier is a genuine research tool for <em>looking up specific selectors</em>, and the moment you need volume or export you are into €2,500/year territory. Budget or downgrade your expectations accordingly.</p>
+<h2>Sources</h2>
+<ul><li><a href="https://intelx.io/">Intelligence X</a> — https://intelx.io/</li><li><a href="https://intelx.io/product">Intelligence X — Product tiers and pricing</a> — https://intelx.io/product</li><li><a href="https://help.intelx.io/get-started/">Intelligence X — Get started</a> — https://help.intelx.io/get-started/</li><li><a href="https://help.intelx.io/api/limits/">Intelligence X — API limits</a> — https://help.intelx.io/api/limits/</li><li><a href="https://help.intelx.io/get-started/selector/">Intelligence X — Selectors</a> — https://help.intelx.io/get-started/selector/</li><li><a href="https://phonebook.cz">Phonebook</a> — https://phonebook.cz</li></ul>
+<p><em>Verification note: the tool and pricing pages were fetched directly from the vendor on 2026-10-10 and the tier figures above are transcribed from their comparison table, so they are vendor-published facts rather than marketing claims. No account was created and no search was run, so behaviour on the free tier (rate limiting, what data is visible) is described from the vendor's own documentation, not from testing.</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

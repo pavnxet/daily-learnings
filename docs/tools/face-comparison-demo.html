@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Face Detection &amp; Comparison (CodeSandbox demo) — compare two uploaded faces</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>Face Detection &amp; Comparison (CodeSandbox demo) — compare two uploaded faces</h1><p class="m">2026-10-10</p></div><div class="entry"><h2>What it is</h2>
+<p>A single-page demo, hosted on CodeSandbox, whose job is narrow: you upload two images, it detects the face in each and compares them, telling you whether they are the same person.</p>
+<p>The URL is a CodeSandbox preview (<code>6mzld2.csb.app</code>) — an ephemeral sandbox hostname, not a product with a domain, docs, or a support channel.</p>
+<h2>Why it matters</h2>
+<p><strong>Because the technique is what you actually want to learn here, not the app.</strong> Face comparison in the browser is a solved, small problem, and every implementation follows the same four steps:</p>
+<ol><li><strong>Detect</strong> the face and its landmarks in each image (bounding box + feature points).</li><li><strong>Align and normalise</strong> — crops, resizes and squares the face so pose and scale do not dominate.</li><li><strong>Embed</strong> — run the crop through a neural network to get a face descriptor: a fixed-length vector (commonly 128 numbers) representing that face.</li><li><strong>Compare</strong> descriptors with a distance metric, typically Euclidean distance, and threshold it.</li></ol>
+<p>The threshold is the entire decision. In the widely used <code>face-api.js</code> implementation the accepted convention is <strong>distance &lt; 0.6 means a match</strong>, and 0.4–0.5 is a confident one. A distance near 0.6 is a coin-flip, not an answer — which is exactly the failure mode people misunderstand when they treat this class of demo as a verdict.</p>
+<p>That matters because the same four steps power passport e-gates, phone unlock, and photo-app "is this the same person" grouping. Once you have seen the pipeline in a 30-line demo, the big systems stop being magic and become threshold tuning plus a much larger, curated model.</p>
+<h2>How to use</h2>
+<ol><li>Open https://6mzld2.csb.app/</li><li>Upload two photos — one face per image works best, front-on, decent lighting.</li><li>It reports a comparison result, typically a similarity/distance figure with a match verdict.</li><li>Read the <strong>distance</strong>, not the verdict. If the tool prints a number, judge it yourself against the 0.6 convention rather than trusting a label.</li></ol>
+<h3>If you want to build it yourself</h3>
+<p>The canonical route is <code>face-api.js</code> (TensorFlow.js under the hood), which runs entirely client-side:</p>
+<pre><code>// after faceapi.loadSsdMobilenetv1Model(...) and loadFaceLandmarkModel(...)
+const a = await faceapi
+  .detectSingleFace(imgA).withFaceLandmarks().withFaceDescriptor();
+const b = await faceapi
+  .detectSingleFace(imgB).withFaceLandmarks().withFaceDescriptor();
+
+// &lt; 0.6 is the usual match threshold; 0.4-0.5 is confident
+const distance = faceapi.euclideanDistance(a.descriptor, b.descriptor);
+console.log(distance, distance &lt; 0.6 ? &quot;likely same person&quot; : &quot;different&quot;);</code></pre>
+<p>Alternatives: <strong>MediaPipe</strong> (faster, lighter, better mobile support) or <strong>InsightFace / ArcFace</strong> models (much more accurate, but usually server-side and heavier).</p>
+<h2>Limits &amp; risks</h2>
+<ul><li><strong>I could not verify this specific demo.</strong> Fetching the URL returned an <strong>HTTP 400 CodeSandbox trust gate</strong> — an interstitial asking <em>"You are opening a CodeSandbox preview, do you want to continue?"</em> that requires a browser cookie to pass. So I cannot confirm which library it uses, whether it is client-side or calls an API, what it uploads, or what it reports. <strong>Everything above about the technique is standard and sourceable; nothing above should be read as a verified description of this app's behaviour.</strong></li><li><strong>Privacy is the first question and it is unanswered.</strong> If it is client-side (the norm for <code>face-api.js</code>), images never leave your machine. If it posts them anywhere, you have just uploaded two photos of a face to an anonymous, ephemeral sandbox of unknown provenance. <strong>Assume the worst until you check the network tab</strong> — open DevTools → Network, then upload, and see whether a request carries your image. Facial images are special-category biometric data under regimes like GDPR, so "it was probably local" is not good enough.</li><li><strong>The hostname can vanish.</strong> <code>.csb.app</code> previews are ephemeral sandboxes tied to someone's account. They get deleted, and this link will 404 with no notice. Do not build anything on it and do not bookmark it as a tool.</li><li><strong>Face comparison is not identification.</strong> This tells you whether two <em>given</em> images match. It cannot find a person from a photo, and it cannot search a database. Treat any tool that blurs that line with suspicion.</li><li><strong>Accuracy is demographic-uneven and threshold-sensitive.</strong> Published work on face recognition consistently finds higher error rates for darker skin tones and for women, and accuracy degrades with pose, lighting, occlusion, age gap, and low resolution. A demo with no confidence reporting hides all of this.</li><li><strong>Never use it for a decision that matters to a person</strong> — access, employment, verification, moderation, or a claim about someone's identity. This class of demo has no calibration, no audit trail, and no appeal path.</li><li><strong>Consent.</strong> Comparing two photos of a real person to determine identity is processing their biometric data. Having the photos is not the same as being allowed to do that.</li></ul>
+<h2>Verdict</h2>
+<p><strong>Useful as a teaching example of the detect → align → embed → compare pipeline. Not a tool, and not verifiable as it stands.</strong></p>
+<p><strong>Use it for</strong>: understanding how face matching works, and as a sanity check on your intuition about thresholds before you use a real library.</p>
+<p><strong>Do not use it for</strong>: any real identification claim, anything involving a third party's biometric data without consent, or anything you need to still exist next month.</p>
+<p><strong>The honest framing</strong>: the interesting content is the four-step pipeline and the 0.6 threshold — those transfer to every real system. The app itself is an anonymous, unverifiable, disposable sandbox, and it should be treated as a demo you look at, not a service you rely on. If you want this capability, build it with <code>face-api.js</code> locally in an afternoon; you will get the same result with privacy you actually control.</p>
+<h2>Sources</h2>
+<ul><li><a href="https://6mzld2.csb.app/">Demo under test</a> — https://6mzld2.csb.app/ <em>(returned HTTP 400 CodeSandbox trust-gate interstitial to automated fetching)</em></li><li><a href="https://github.com/justadudewhohacks/face-api.js"><code>face-api.js</code></a> — https://github.com/justadudewhohacks/face-api.js</li><li><a href="https://github.com/justadudewhohacks/face-api.js#face-recognition">face-api.js — face recognition docs (descriptors, <code>euclideanDistance</code>, 0.6 threshold)</a> — https://github.com/justadudewhohacks/face-api.js#face-recognition</li><li><a href="https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector">MediaPipe Face Detection</a> — https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector</li><li><a href="https://github.com/deepinsight/insightface">InsightFace (ArcFace models)</a> — https://github.com/deepinsight/insightface</li><li><a href="https://github.com/spiffgreen/face-comparison-api">face-comparison-api (reference implementation)</a> — https://github.com/spiffgreen/face-comparison-api</li></ul>
+<p><em>Verification note: the demo could not be reached — CodeSandbox served a trust-gate page requiring user interaction and a cookie. Its library, upload behaviour and output format are therefore <strong>unknown and unverified</strong>. The pipeline description and the 0.6 threshold are general knowledge taken from the <code>face-api.js</code> documentation, not from this app, and are labelled as such above. The claim that face recognition error rates vary by demographic group is well established in the literature but was not re-verified against a specific study for this entry.</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

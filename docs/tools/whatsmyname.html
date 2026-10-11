@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WhatsMyName — username enumeration dataset (and whatsmyname.app)</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>WhatsMyName — username enumeration dataset (and whatsmyname.app)</h1><p class="m">2026-10-10</p></div><div class="entry"><h2>What it is</h2>
+<p>WhatsMyName (WMN) is <strong>a dataset, not an application.</strong> It is a single JSON file — <code>wmn-data.json</code> — where each entry describes how to check one website for a username: what URL to request, and what a hit versus a miss looks like. Tools read the file and do the actual checking.</p>
+<p>That split is the whole design. Anyone can write a checker; the data stays accurate independently of which tool you use. Started in 2015 as a fix for the creator's frustration that existing username checkers were full of <strong>false positives</strong>, it has grown into one of the most widely used username-enumeration datasets in OSINT.</p>
+<p>The web interface at <a href="https://whatsmyname.app/">whatsmyname.app</a> (built by Chris Poulter, OSINT Combine) runs the dataset in the browser: filter by category, export to CSV, always pulls the latest data.</p>
+<p>A site only qualifies for inclusion if it:</p>
+<ol><li>Is <strong>publicly accessible</strong> — paywalls and login walls can't be checked</li><li><strong>Contains the username in the URL</strong> — the profile URL must include it directly</li><li><strong>Does not transform the username</strong> — sites mapping usernames to numeric IDs won't work</li></ol>
+<h2>Why it matters</h2>
+<p>One username, run once, tells you which of hundreds of services a person uses. That is the single highest-yield move in a digital-footprint investigation, because a reused handle is the strongest and cheapest link between separate accounts.</p>
+<p>It is also worth knowing <em>because it is infrastructure</em>. Judging by the consumer tools that embed it — Blackbird, SpiderFoot's <code>sfp_account</code> module, Maltego transforms, Sherlock-style checkers — WMN is closer to the data layer of this corner of OSINT than a tool you use directly.</p>
+<h2>How to use</h2>
+<h3>Web (no install)</h3>
+<p>Open https://whatsmyname.app/, enter a username, filter by category, export CSV.</p>
+<h3>Command line</h3>
+<p>The bundled checker scripts were <strong>removed in May 2023</strong> — the project maintains data only. Use a third-party checker against the JSON:</p>
+<table><thead><tr><th>Tool</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><a href="https://github.com/3xp0rt/Naminter">Naminter</a></td><td>Python</td><td>Built specifically for this dataset; Cloudflare bypass, browser impersonation, concurrent checking</td></tr><tr><td><a href="https://github.com/p1ngul1n0/blackbird">Blackbird</a></td><td>Python</td><td>Fast username/email search</td></tr><tr><td><a href="https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python">WhatsMyName-Python</a></td><td>Python</td><td>Simple script</td></tr><tr><td><a href="https://github.com/yooper/reveal-my-name">Reveal My Name</a></td><td>Python</td><td>The original bundled checker, maintained separately</td></tr><tr><td><a href="https://github.com/kpcyrd/sn0int">sn0int</a></td><td>Rust</td><td>Uses WMN in the <code>kpcyrd/whatsmyname</code> module</td></tr><tr><td><a href="https://github.com/funnyzak/name-seeker">NameSeeker</a></td><td>Electron</td><td>Desktop app; exports PDF, CSV, JSON</td></tr><tr><td><a href="https://github.com/smicallef/spiderfoot">SpiderFoot</a></td><td>Python</td><td><code>sfp_account</code> module</td></tr></tbody></table>
+<h3>Roll your own</h3>
+<p>Because it is just JSON with <code>url</code> and <code>response codes</code> per site, a minimal checker is a loop over <code>sites</code>:</p>
+<pre><code>import json, requests
+
+data = json.load(open(&quot;wmn-data.json&quot;, encoding=&quot;utf-8&quot;))
+username = &quot;target&quot;
+
+for site in data[&quot;sites&quot;]:
+    url = site[&quot;uri_check&quot;].format(account=username)
+    try:
+        r = requests.get(url, timeout=10, headers={&quot;User-Agent&quot;: &quot;Mozilla/5.0&quot;})
+        found = r.status_code == site[&quot;e_code&quot;] and site[&quot;e_string&quot;] in r.text
+        if found:
+            print(f&quot;FOUND  {site[&#x27;name&#x27;]}: {site[&#x27;uri_pretty&#x27;].format(account=username)}&quot;)
+    except requests.RequestException:
+        pass  # a network error is not a &quot;not found&quot;</code></pre>
+<p><strong>Keep the error path distinct from the miss path.</strong> The single most common bug in home-made checkers is treating a timeout, a 403 or a Cloudflare challenge as "user does not exist" — which silently produces the false negatives the dataset exists to prevent.</p>
+<h2>Limits &amp; risks</h2>
+<ul><li><strong>Cloudflare and bot protection break checkers constantly.</strong> Many target sites challenge automated requests. That is why Naminter advertises Cloudflare bypass and browser impersonation — without them, results are wrong rather than missing. <strong>A 403 is not a negative result.</strong></li><li><strong>False positives and negatives still happen.</strong> The dataset encodes expected status code <em>and</em> an expected string per site. Sites change their markup, response codes and URL shapes continuously, which is why the project actively asks for contributions to repair broken detections. Verify hits manually before relying on them.</li><li><strong>The dataset is inaccurate by decay, not by design.</strong> Any given detection has a shelf life. Pull the JSON fresh rather than vendoring an old copy — the web tool always fetches the latest.</li><li><strong>Sites that transform usernames are excluded</strong>, so absence of a hit proves nothing about those platforms.</li><li><strong><code>whatsmyname.app</code> blocks automated fetching.</strong> Fetching it returned <strong>HTTP 403</strong> during research on 2026-10-10, so do not build a pipeline against the web UI — use the JSON or a CLI checker. The JSON is the supported integration point.</li><li><strong>This is personal-data processing.</strong> Enumerating a real person's accounts across hundreds of services is surveillance-adjacent even when every individual request is to a public page. Depending on your role, jurisdiction and purpose you may need a lawful basis, and many sites' terms prohibit automated querying regardless of the data being public.</li><li><strong>Do not use it to harass, stalk, or compile dossiers on people who have not consented.</strong> The tool cannot tell you the difference; you have to.</li><li><strong>Licence is CC BY-SA 4.0</strong> — attribution required, and derivatives must carry the same licence. If you ship a tool embedding <code>wmn-data.json</code>, honour that.</li></ul>
+<h2>Verdict</h2>
+<p><strong>The reference dataset for username enumeration, and still the best starting point for digital-footprint work — as long as you respect that it is data with a shelf life.</strong></p>
+<p><strong>Use it for</strong>: finding which services a handle is registered on, checking your own footprint, feeding an existing OSINT tool, and building a checker without having to first solve per-site detection rules.</p>
+<p><strong>Do not use it for</strong>: automated scraping of the web UI (it 403s), treating a lone negative as proof of absence, or compiling profiles of people without a lawful basis.</p>
+<p><strong>The honest framing</strong>: its value is curation, not cleverness. The idea is trivial and the maintenance is the product — which is exactly why the false-positive rate is the selling point and why a stale copy of the file is worse than useless.</p>
+<h2>Sources</h2>
+<ul><li><a href="https://github.com/WebBreacher/WhatsMyName">WhatsMyName on GitHub</a> — https://github.com/WebBreacher/WhatsMyName</li><li><a href="https://raw.githubusercontent.com/WebBreacher/WhatsMyName/main/README.md">WhatsMyName README (raw)</a> — https://raw.githubusercontent.com/WebBreacher/WhatsMyName/main/README.md</li><li><strong><a href="https://whatsmyname.app/">whatsmyname.app</a></strong> — https://whatsmyname.app/ <em>(returned HTTP 403 to automated fetching)</em></li><li><a href="https://bellingcat.gitbook.io/toolkit/more/all-tools/whats-my-name">Bellingcat's Online Investigation Toolkit — WhatsMyName</a> — https://bellingcat.gitbook.io/toolkit/more/all-tools/whats-my-name</li><li><a href="https://github.com/3xp0rt/Naminter">Naminter</a> — https://github.com/3xp0rt/Naminter</li><li><a href="https://github.com/p1ngul1n0/blackbird">Blackbird</a> — https://github.com/p1ngul1n0/blackbird</li><li><a href="https://github.com/yooper/reveal-my-name">Reveal My Name</a> — https://github.com/yooper/reveal-my-name</li><li><a href="https://github.com/smicallef/spiderfoot">SpiderFoot</a> — https://github.com/smicallef/spiderfoot</li></ul>
+<p><em>Verification note: the dataset README and licence were fetched from the repo, and <code>whatsmyname.app</code> genuinely returned HTTP 403 to automated access (confirmed, not assumed) — recorded above as a real limitation. The requester-count claim "700+ sites" comes from the repo's own description; the live count is in <code>wmn-data.json</code> (<code>$.sites.length</code>) and is worth reading directly rather than trusting the badge. No username search was run.</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

@@ -27,7 +27,18 @@ New things learned from daily routine, and new tools explored. One page per entr
 | 5 | [ProxyNova anonymous email](tools/proxynova-anonymous-email.md) | No-signup web form that mails anyone from a rotating sender pool, so the recipient cannot trace it to you — capped at 5 emails/day | 2026-10-10 |
 | 6 | [Face Detection & Comparison demo](tools/face-comparison-demo.md) | Browser demo comparing two uploaded faces — a teaching example of the detect → align → embed → compare pipeline | 2026-10-10 |
 
-*Each entry page carries a `Summary` line; the website index is built from those lines.*
+*Each entry page carries a `Summary` line; the website index is built from those lines. Entries marked **हिंदी** on the site also have a Hindi translation.*
+
+## Languages
+
+Every entry is available in **English and Hindi**, switchable from the language links at the top of each entry page. Hindi is served as finished static HTML — `docs/tools/<slug>.hi.html` — so **nothing is translated in the browser and no model is ever downloaded by a visitor.** The pages are pre-built, load instantly, work offline, and cost nothing to serve.
+
+- English source: `tools/<slug>.md`
+- Hindi translation: `tools/<slug>.hi.md` (optional — an entry without one simply shows no language toggle)
+
+Technical substance stays in English inside both versions: code blocks, commands, model IDs, URLs, filenames, and product names. Translating `` `lc_router.py` `` or `POST /v1/chat/completions` would be actively harmful, so those are left alone and the surrounding prose is translated.
+
+**Why pre-built rather than a live translator:** accurate machine translation needs either a large server or a large model. GitHub Pages can host neither, and in-browser models mean a ~100 MB+ download on first visit. Translating at build time is the only approach that gives good quality with **zero download and no API**, which is why it's used here.
 
 ## How an entry is written
 
@@ -47,17 +58,17 @@ Rules that keep the log honest:
 
 ## Submitting a new learning
 
-Send the link, name, or rough description of the tool — one line is enough. Each submission is then researched across multiple independent sources (vendor site, official docs, package registry, third-party reviews and known criticisms), written up as `tools/<slug>.md`, added to the index, and rebuilt into the site. No further input is needed.
+Send the link, name, or rough description of the tool — one line is enough. Each submission is then researched across multiple independent sources (vendor site, official docs, package registry, third-party reviews and known criticisms), written up as `tools/<slug>.md`, **translated to `tools/<slug>.hi.md`**, added to the index, and rebuilt into the site. No further input is needed.
 
 ## The site
 
-`docs/` is generated from `tools/*.md` — GitHub Pages serves Markdown as plain text, so each entry gets a styled HTML page instead:
+`docs/` is generated from `tools/` — GitHub Pages serves Markdown as plain text, so each entry gets a styled HTML page instead:
 
 ```bash
-python generate.py     # rebuild docs/ after adding or editing an entry
+python generate.py     # rebuild docs/ after adding or editing an entry or translation
 ```
 
-Minimal theme, no framework, no dependencies, works in light and dark mode. Pages is published from **`main` / `docs`**.
+Minimal theme, no framework, no dependencies, works in light and dark mode, bilingual. Pages is published from **`main` / `docs`**.
 
 ### Theme
 
@@ -69,16 +80,21 @@ The saved theme is applied by a short inline script placed **before** the styles
 
 ```
 daily-learnings/
-├── README.md            this index
-├── AGENTS.md            logging protocol for AI agents
-├── generate.py          builds docs/ from tools/*.md
-├── tools/               one markdown page per entry  ← the source of truth
-│   └── smailpro.md
-├── docs/                generated site (GitHub Pages)
+├── README.md                  this index
+├── AGENTS.md                  logging protocol for AI agents
+├── generate.py                builds docs/ from tools/
+├── tools/                     ← source of truth
+│   ├── smailpro.md            one English entry
+│   └── smailpro.hi.md         its Hindi translation
+├── docs/                      generated site (GitHub Pages)
 │   ├── index.html
-│   └── tools/smailpro.html
-└── learning/            research notes, not published
+│   └── tools/
+│       ├── smailpro.html
+│       └── smailpro.hi.html
+└── learning/                  research notes, not published (gitignored)
 ```
+
+To add a language, add its code and label to `LANGS` in `generate.py` and supply `tools/<slug>.<code>.md` files — the toggle, `lang` attribute and index markers follow automatically.
 
 ---
 

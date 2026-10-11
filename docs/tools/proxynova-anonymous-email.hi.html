@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProxyNova अनाम ईमेल — अपना पता बताए बिना मेल भेजें</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.page-head .m{margin:0}
+.langs{margin:.5rem 0 0;font-size:.9rem;color:var(--muted)}
+.langs strong{color:var(--fg)}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>ProxyNova अनाम ईमेल — अपना पता बताए बिना मेल भेजें</h1><p class="m">2026-10-10 &nbsp;·&nbsp; <a href="https://www.proxynova.com/tools/send-anonymous-email/">साइट देखें</a></p><p class="langs"><a href="proxynova-anonymous-email.html">English</a> · <strong>हिंदी</strong></p></div><div class="entry"><h2>यह क्या है</h2>
+<p>ProxyNova का एक मुफ़्त वेब टूल (एक पुरानी प्रॉक्सी-लिस्ट साइट, जो अब सामान्य उपयोगिता साइट बन गई है)। आप To, वैकल्पिक From, वैकल्पिक सब्जेक्ट और बॉडी भरते हैं, और यह संदेश प्राप्तकर्ता तक <strong>ProxyNova के नियंत्रण वाले ईमेल पतों के एक पूल में से किसी एक से</strong> पहुँचाता है, आपके पते से नहीं।</p>
+<p>डिज़ाइन का असली मुद्दा <strong>घूमता हुआ प्रेषक पूल</strong> है: एक ही स्थिर पते से भेजने के बजाय, प्राप्तकर्ता को दिखने वाला "From:" साइट के कई रैंडम पतों में से एक होता है, और समय-समय पर नए जुड़ते रहते हैं। ProxyNova का तर्क यह है कि एक तय प्रेषक पता प्राप्तकर्ता के स्पैम फ़िल्टर और ब्लॉकलिस्ट के लिए सीखना और दबाना आसान होता है, जबकि रोटेशन नहीं।</p>
+<p>इसे वही ऑपरेटर चलाता है जो बाक़ी ProxyNova टूलकिट चलाता है (IP लोकेशन, प्रॉक्सी एक्सट्रैक्टर, पोर्ट स्कैनर, लिंक एक्सट्रैक्टर, पासवर्ड चेकर, "Combination of Many Breaches" खोज, और बहुत कुछ), और साइट कहती है कि हर कुछ हफ़्तों में टूल जुड़ते हैं — इस नीति के साथ कि हर टूल या तो अनोखे तरीक़े से उपयोगी हो, या मौजूदा टूलों से काफ़ी बेहतर, और सरल, मुफ़्त तथा जहाँ संभव हो सार्वजनिक API पर खुला हो।</p>
+<h2>यह क्यों मायने रखता है</h2>
+<p>यह अनाम ईमेल की पूरी सेटअप लागत हटा देता है। विकल्प — किसी मुफ़्त प्रोवाइडर पर झूठे विवरण के साथ बर्नर अकाउंट बनाना — उसमें साइनअप, अक्सर फ़ोन नंबर, और वैसे भी उस प्रोवाइडर को आपका IP लीक होता है। यह चार फ़ील्ड वाला फ़ॉर्म है, कोई अकाउंट नहीं।</p>
+<p>यह अनामिता टूलों के मूल समझौते का अच्छा उदाहरण भी है: <strong>आप ऑपरेटर से अनाम नहीं हैं, सिर्फ़ प्राप्तकर्ता से हैं।</strong> ProxyNova साफ़ कहता है कि उसे आपके बारे में सिर्फ़ आपका IP पता मालूम होता है, और कि "प्राप्तकर्ता इसे कभी उस व्यक्ति या कंप्यूटर से नहीं जोड़ पाएगा जिसने मेल भेजा"। यह सटीक और ईमानदार दावा है — यह <em>प्राप्तकर्ता</em> की असमर्थता के बारे में है, ऑपरेटर की नहीं। अनामिता का दावा करने वाले किसी भी टूल को इतनी बारीक़ी से पढ़ना चाहिए।</p>
+<h2>इस्तेमाल कैसे करें</h2>
+<ol><li>https://www.proxynova.com/tools/send-anonymous-email/ खोलें</li><li>प्राप्तकर्ता का पता भरें (ज़रूरी), और वैकल्पिक रूप से From, सब्जेक्ट और संदेश।</li><li>भेजें। साइट उपलब्धता जाँचती है — यह लाइव ऑनलाइन काउंटर दिखाती है, जैसे <em>"Online 12/17"</em>, और बताती है कि व्यस्त समय में मेलर ऑफ़लाइन हो जाता है।</li><li>एरर आए तो बाद में फिर कोशिश करें। यह दर्ज व्यवहार है, बग नहीं।</li></ol>
+<p><strong>अटैचमेंट नहीं।</strong> टूल कहता है कि आसान रास्ता नहीं है; सुझाया गया तरीक़ा यह है कि फ़ाइल कहीं और अपलोड करें (यह WeTransfer सुझाता है) और लिंक बॉडी में डाल दें।</p>
+<p><strong>ऑटोमेशन</strong>: ProxyNova सामान्य रूप से अपने टूलों के लिए https://api.proxynova.com/ पर सार्वजनिक API देता है, "कुछ सीमाओं के साथ"। अनाम मेलर ख़ास तौर पर API पर है या नहीं, यह टूल पेज पर नहीं लिखा — मानने से पहले API दस्तावेज़ देखें। नीचे दी गई रोज़ाना सीमाएँ हर हाल में लागू हैं।</p>
+<h3>सीमाएँ</h3>
+<table><thead><tr><th>सीमा</th><th>मान</th></tr></thead><tbody><tr><td>प्रति यूज़र</td><td><strong>5 ईमेल प्रति दिन</strong>, सख़्त सीमा</td></tr><tr><td>ग्लोबल</td><td>पूरी साइट पर रोज़ाना कैप — हिट होने पर API लिमिट एरर मिलता है, क़तार नहीं</td></tr><tr><td>अटैचमेंट</td><td>समर्थित नहीं</td></tr><tr><td>अकाउंट</td><td>ज़रूरी नहीं</td></tr></tbody></table>
+<h2>सीमाएँ और जोखिम</h2>
+<ul><li><strong>आप प्राप्तकर्ता से अनाम हैं, ProxyNova और नेटवर्क से नहीं।</strong> ऑपरेटर आपका IP देखता है (यह पेज पर दिखाता भी है — मेरे मामले में <strong>157.48.105.195</strong>), और संदेश फिर भी सादा ईमेल है: <strong>कोई एंड-टू-एंड एन्क्रिप्शन नहीं</strong>, यानी यह ट्रांज़िट में और हर उस मेल सर्वर पर पढ़ा जा सकता है जिससे गुज़रता है, प्राप्तकर्ता के प्रोवाइडर समेत। अगर सामग्री संवेदनशील है, तो यह टूल जवाब नहीं है — PGP या कोई असली अनाम-मेल सेटअप इस्तेमाल करें।</li><li><strong>From फ़ील्ड कोई सत्यापन नहीं है।</strong> चूँकि भेजना ऑपरेटर के घूमते पूल से होता है, प्राप्तकर्ता के मेल क्लाइंट में प्रेषक मेल न खाता या उलझा हुआ दिख सकता है, और यह स्पैम में जा सकता है। डिलीवरेबिलिटी को डिज़ाइन से ही अविश्वसनीय मानें।</li><li><strong>5 ईमेल/दिन बहुत सख़्त छत है</strong>, और ग्लोबल कैप का मतलब है कि कोटा बचा होने पर भी यह फेल हो सकता है। यह एक-बार संदेश भेजने का टूल है, कोई चैनल नहीं।</li><li><strong>अटैचमेंट न होने</strong> का मतलब है कि टेक्स्ट के अलावा सब कुछ किसी तीसरे पक्ष पर होस्ट करना पड़ेगा, जो सामग्री को फिर किसी पहचान या कम से कम किसी सेवा से जोड़ देता है।</li><li><strong>यह जानबूझकर साझा दुरुपयोग की सतह है।</strong> साइट पर फ़ीडबैक/abuse-report लिंक और information-removal फ़ॉर्म है, और कहा गया है कि स्पैम या धमकी जैसे ग़ैरक़ानूनी इस्तेमाल पर बैन लगेगा। यानी भेजने वाले डोमेन पर हर दूसरे यूज़र की प्रतिष्ठा का बोझ है — <strong>आपका वैध मेल किसी और के दुरुपयोग की वजह से ब्लॉक हो सकता है</strong>, और टूल जितना लोकप्रिय होगा यह जोखिम उतना बढ़ेगा।</li><li><strong>"अनाम" ग़लत इस्तेमाल को बुलावा देता है।</strong> टूल के अपने नियम स्पैम और ग़ैरक़ानूनी गतिविधि मना करते हैं। किसी को बिना पहचान वाला संदेश भेजना सामग्री और क्षेत्राधिकार के हिसाब से उत्पीड़न या अपराध हो सकता है, और प्राप्तकर्ता का आपको पहचान न पाना इसे क़ानूनी नहीं बनाता। इससे भेजी धमकियाँ धमकियाँ ही रहती हैं, और ऑपरेटर क़ानूनी अनुरोधों का पालन करेगा।</li><li><strong>किसी वैध जवाबदेही प्रक्रिया से बचने के लिए इसका इस्तेमाल न करें</strong> — कोई अनुबंध, अदालती आदेश, प्लेटफ़ॉर्म बैन, या पेशेवर ज़िम्मेदारी। प्राप्तकर्ता से अनामिता क़ानून से अनामिता नहीं है।</li><li><strong>उपलब्धता खुलकर अस्थिर है।</strong> पेज ख़ुद व्यस्त समय में डाउनटाइम की चेतावनी देता है और ऑनलाइन/ऑफ़लाइन काउंटर दिखाता है। किसी समय-संवेदनशील काम के लिए इस पर निर्भर न रहें।</li><li><strong>तीसरे पक्ष की प्रतिष्ठा मिली-जुली है।</strong> ProxyNova एक लंबे समय से चलने वाली साइट है (© 2011–2026), पर किसी भी मुफ़्त प्रॉक्सी-नज़दीकी सेवा की तरह यह scam-check एग्रीगेटरों पर दिखती है; वे रेटिंग अपने आप बनती हैं और ज़्यादातर श्रेणी को दर्शाती हैं, किसी ठोस कदाचार को नहीं। इसे तंत्र के आधार पर आँकें, रेटिंग के आधार पर नहीं।</li></ul>
+<h2>निष्कर्ष</h2>
+<p><strong>गैर-संवेदनशील, वैध संदेशों के लिए एक-बार का अनाम मेलर — और इससे ज़्यादा कुछ नहीं।</strong></p>
+<p><strong>इसके लिए इस्तेमाल करें</strong>: ऐसा एक-बार का संदेश भेजने के लिए जहाँ आप अपना असली पता नहीं देना चाहते, किसी से अपनी पहचान छिपाकर संपर्क करने के लिए, या यह टेस्ट करने के लिए कि प्राप्तकर्ता का मेल क्लाइंट घूमते प्रेषक वाला संदेश कैसा दिखाता है।</p>
+<p><strong>इसके लिए न करें</strong>: कुछ भी ग़ैरक़ानूनी, उत्पीड़नकारी या धमकी भरा; कुछ भी गोपनीय (एन्क्रिप्शन नहीं, ऑपरेटर को दिखता है, और आपका IP दर्ज होता है); अटैचमेंट वाला कुछ भी; समय-संवेदनशील कुछ भी; या ऐसा कोई इस्तेमाल जहाँ आपको ऑपरेटर और नेटवर्क से भी अज्ञात रहना हो।</p>
+<p><strong>ईमानदार ढाँचा</strong>: यहाँ "अनाम" का मतलब है <em>प्राप्तकर्ता इसे आप तक नहीं पहुँचा सकता</em>। इसका मतलब निजी, एन्क्रिप्टेड या अगम्य नहीं है — ProxyNova आपका IP जानता है, मेल सादा टेक्स्ट है, और प्राप्तकर्ता का प्रोवाइडर उसे पढ़ सकता है। इस्तेमाल से पहले समझें कि आपको इनमें से क्या चाहिए, क्योंकि यह टूल इनमें से सिर्फ़ एक देता है।</p>
+<h2>स्रोत</h2>
+<ul><li><a href="https://www.proxynova.com/tools/send-anonymous-email/">Send Email Anonymously — ProxyNova</a> — https://www.proxynova.com/tools/send-anonymous-email/</li><li><a href="https://www.proxynova.com/tools/">ProxyNova online tools index</a> — https://www.proxynova.com/tools/</li><li><a href="https://api.proxynova.com/">ProxyNova public API</a> — https://api.proxynova.com/</li></ul>
+<p><em>सत्यापन नोट: टूल पेज और टूल्स इंडेक्स 2026-10-10 को सीधे लाए गए, इसलिए 5-ईमेल-प्रति-दिन की सीमा, ग्लोबल कैप, घूमता प्रेषक तंत्र और अटैचमेंट न होने की बाधा विक्रेता के अपने "Limitations" हिस्से से लिखे गए हैं, अनुमान से नहीं। कोई ईमेल नहीं भेजा गया, इसलिए असली डिलीवरेबिलिटी, स्पैम-फ़िल्टर व्यवहार और भरोसेमंद प्रेषक पूल टेस्ट नहीं हुए। ऊपर दिखाया गया IP शोधकर्ता का ख़ुद का है, जिसे टूल सार्वजनिक रूप से दिखाता है — यह अच्छा प्रमाण है कि यह भेजने वाले का IP दर्ज करता है।</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

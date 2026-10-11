@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>फ़ेस डिटेक्शन और तुलना (CodeSandbox डेमो) — दो अपलोड किए चेहरों की तुलना</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.page-head .m{margin:0}
+.langs{margin:.5rem 0 0;font-size:.9rem;color:var(--muted)}
+.langs strong{color:var(--fg)}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>फ़ेस डिटेक्शन और तुलना (CodeSandbox डेमो) — दो अपलोड किए चेहरों की तुलना</h1><p class="m">2026-10-10 &nbsp;·&nbsp; <a href="https://6mzld2.csb.app/">साइट देखें</a></p><p class="langs"><a href="face-comparison-demo.html">English</a> · <strong>हिंदी</strong></p></div><div class="entry"><h2>यह क्या है</h2>
+<p>CodeSandbox पर होस्ट किया एक सिंगल-पेज डेमो, जिसका काम बहुत सीमित है: आप दो इमेज अपलोड करते हैं, यह दोनों में चेहरा ढूँढता है और उनकी तुलना करके बताता है कि एक ही व्यक्ति हैं या नहीं।</p>
+<p>URL एक CodeSandbox प्रीव्यू है (<code>6mzld2.csb.app</code>) — यानी एक अस्थायी सैंडबॉक्स होस्टनेम, कोई ऐसा प्रोडक्ट नहीं जिसका अपना डोमेन, दस्तावेज़ या सपोर्ट हो।</p>
+<h2>यह क्यों मायने रखता है</h2>
+<p><strong>क्योंकि असल में सीखने लायक चीज़ यह तकनीक है, ऐप नहीं।</strong> ब्राउज़र में चेहरा मिलान एक हल हो चुकी, छोटी समस्या है, और हर कार्यान्वयन इन्हीं चार चरणों में चलता है:</p>
+<ol><li><strong>पहचानें (Detect)</strong> — दोनों इमेज में चेहरा और उसके लैंडमार्क ढूँढें (बाउंडिंग बॉक्स + फ़ीचर पॉइंट)।</li><li><strong>अलाइन और नॉर्मलाइज़ करें</strong> — क्रॉप, रीसाइज़ और स्क्वायर करें ताकि मुद्रा और साइज़ हावी न हों।</li><li><strong>एम्बेड करें</strong> — क्रॉप को न्यूरल नेटवर्क से गुज़ारकर फ़ेस डिस्क्रिप्टर पाएँ: एक तय लंबाई का वेक्टर (आमतौर पर 128 संख्याएँ) जो उस चेहरे को दर्शाता है।</li><li><strong>तुलना करें</strong> — डिस्क्रिप्टरों की दूरी नापें, आमतौर पर Euclidean दूरी, और उस पर थ्रेशोल्ड लगाएँ।</li></ol>
+<p>थ्रेशोल्ड ही पूरा फ़ैसला है। आमतौर पर इस्तेमाल होने वाले <code>face-api.js</code> कार्यान्वयन में मान्य परंपरा है: <strong>दूरी &lt; 0.6 का मतलब मैच</strong>, और 0.4–0.5 भरोसेमंद मैच। 0.6 के आसपास की दूरी सिक्का उछालना है, जवाब नहीं — और लोग इसी श्रेणी के डेमो को फ़ैसला मान लेते हैं, यही सबसे आम भूल है।</p>
+<p>यह इसलिए मायने रखता है कि यही चार चरण पासपोर्ट ई-गेट, फ़ोन अनलॉक, और फ़ोटो ऐप के "क्या यह वही व्यक्ति है" ग्रुपिंग में भी काम करते हैं। एक बार 30 लाइन के डेमो में यह पाइपलाइन देख लेने के बाद ये बड़े सिस्टम जादू नहीं रह जाते — वे थ्रेशोल्ड ट्यूनिंग प्लस एक बहुत बड़ा, क्यूरेट किया हुआ मॉडल बन जाते हैं।</p>
+<h2>इस्तेमाल कैसे करें</h2>
+<ol><li>https://6mzld2.csb.app/ खोलें</li><li>दो फ़ोटो अपलोड करें — हर इमेज में एक चेहरा, सामने से, ठीक रोशनी में सबसे अच्छा चलता है।</li><li>यह तुलना का नतीजा दिखाता है, आमतौर पर similarity/distance संख्या के साथ मैच/न मैच का फ़ैसला।</li><li><strong>दूरी पढ़ें, फ़ैसला नहीं।</strong> अगर टूल संख्या दिखाता है, तो 0.6 की परंपरा से ख़ुद आँकें, लेबल पर भरोसा न करें।</li></ol>
+<h3>अगर आप इसे ख़ुद बनाना चाहें</h3>
+<p>मानक रास्ता <code>face-api.js</code> है (अंदर TensorFlow.js), जो पूरी तरह क्लाइंट-साइड चलता है:</p>
+<pre><code>// faceapi.loadSsdMobilenetv1Model(...) और loadFaceLandmarkModel(...) के बाद
+const a = await faceapi
+  .detectSingleFace(imgA).withFaceLandmarks().withFaceDescriptor();
+const b = await faceapi
+  .detectSingleFace(imgB).withFaceLandmarks().withFaceDescriptor();
+
+// 0.6 से कम आमतौर पर मैच; 0.4-0.5 भरोसेमंद
+const distance = faceapi.euclideanDistance(a.descriptor, b.descriptor);
+console.log(distance, distance &lt; 0.6 ? &quot;likely same person&quot; : &quot;different&quot;);</code></pre>
+<p>विकल्प: <strong>MediaPipe</strong> (तेज़, हल्का, मोबाइल पर बेहतर) या <strong>InsightFace / ArcFace</strong> मॉडल (कहीं ज़्यादा सटीक, पर आमतौर पर सर्वर-साइड और भारी)।</p>
+<h2>सीमाएँ और जोखिम</h2>
+<ul><li><strong>मैं इस विशेष डेमो को सत्यापित नहीं कर सका।</strong> URL फ़ेच करने पर <strong>HTTP 400 CodeSandbox trust gate</strong> आया — एक बीच वाला पेज जो पूछता है <em>"You are opening a CodeSandbox preview, do you want to continue?"</em> और जिसे पार करने के लिए ब्राउज़र कुकी चाहिए। इसलिए मैं पुष्टि नहीं कर सकता कि यह कौन-सी लाइब्रेरी इस्तेमाल करता है, क्लाइंट-साइड है या किसी API को कॉल करता है, क्या अपलोड करता है, या क्या दिखाता है। <strong>तकनीक के बारे में ऊपर जो कुछ है वह मानक और स्रोत-सहित है; इसे इस ऐप के व्यवहार का सत्यापित विवरण न पढ़ें।</strong></li><li><strong>प्राइवेसी पहला सवाल है और अनुत्तरित है।</strong> अगर यह क्लाइंट-साइड है (<code>face-api.js</code> का सामान्य तरीक़ा), तो इमेज आपकी मशीन से बाहर जाती ही नहीं। अगर यह कहीं पोस्ट करता है, तो आपने अभी-अभी किसी अनजान, अस्थायी सैंडबॉक्स पर चेहरे की दो फ़ोटो अपलोड कर दी हैं। <strong>जाँचने तक सबसे बुरा मान लें</strong> — DevTools → Network खोलें, फिर अपलोड करें, और देखें कि कोई रिक्वेस्ट आपकी इमेज ले जा रही है या नहीं। चेहरे की इमेजें GDPR जैसे क़ानूनों में विशेष-श्रेणी का बायोमेट्रिक डेटा हैं, इसलिए "शायद लोकल था" काफ़ी नहीं है।</li><li><strong>होस्टनेम ग़ायब हो सकता है।</strong> <code>.csb.app</code> प्रीव्यू किसी के अकाउंट से जुड़े अस्थायी सैंडबॉक्स हैं। वे हट जाते हैं, और यह लिंक बिना सूचना 404 हो जाएगा। इस पर कुछ न बनाएँ और इसे किसी टूल की तरह बुकमार्क न करें।</li><li><strong>चेहरा मिलान पहचान नहीं है।</strong> यह बताता है कि दो <em>दी गई</em> इमेज मेल खाती हैं या नहीं। यह फ़ोटो से किसी व्यक्ति को ढूँढ नहीं सकता, और किसी डेटाबेस में खोज नहीं कर सकता। जो टूल यह फ़र्क़ धुँधला करता है, उस पर शक करें।</li><li><strong>सटीकता जनसांख्यिकीय रूप से असमान और थ्रेशोल्ड-संवेदनशील है।</strong> फ़ेस रिकग्निशन पर प्रकाशित काम लगातार बताता है कि गहरी त्वचा और महिलाओं के लिए त्रुटि दर ज़्यादा है, और मुद्रा, रोशनी, ढकाव, उम्र का अंतर तथा कम रेज़ोल्यूशन से सटीकता गिरती है। बिना भरोसा-स्तर बताने वाला डेमो यह सब छिपा देता है।</li><li><strong>किसी व्यक्ति से जुड़े किसी अहम फ़ैसले में इसका इस्तेमाल कभी न करें</strong> — पहुँच, नौकरी, सत्यापन, मॉडरेशन, या किसी की पहचान पर कोई दावा। इस श्रेणी के डेमो में न कैलिब्रेशन होता है, न ऑडिट ट्रेल, न अपील का रास्ता।</li><li><strong>सहमति।</strong> किसी असली व्यक्ति की दो फ़ोटो की तुलना करके पहचान तय करना उसका बायोमेट्रिक डेटा प्रोसेस करना है। फ़ोटो होना और ऐसा करने की अनुमति होना एक बात नहीं है।</li></ul>
+<h2>निष्कर्ष</h2>
+<p><strong>detect → align → embed → compare पाइपलाइन सिखाने के लिए उपयोगी उदाहरण। टूल नहीं, और जैसा है वैसा असत्यापित।</strong></p>
+<p><strong>इसके लिए इस्तेमाल करें</strong>: यह समझने के लिए कि चेहरा मिलान कैसे काम करता है, और असली लाइब्रेरी इस्तेमाल करने से पहले थ्रेशोल्ड के बारे में अपनी समझ जाँचने के लिए।</p>
+<p><strong>इसके लिए न करें</strong>: पहचान का कोई असली दावा, किसी तीसरे व्यक्ति के बायोमेट्रिक डेटा से जुड़ा कुछ भी बिना सहमति, या ऐसा कुछ जो आपको अगले महीने भी चाहिए।</p>
+<p><strong>ईमानदार ढाँचा</strong>: असली सामग्री चार-चरणीय पाइपलाइन और 0.6 का थ्रेशोल्ड है — ये हर असली सिस्टम पर लागू होते हैं। ऐप ख़ुद एक अनजान, असत्यापित, फेंकने लायक सैंडबॉक्स है, और इसे देखने की चीज़ मानें, भरोसे की सेवा नहीं। अगर यह क्षमता चाहिए, तो <code>face-api.js</code> से लोकल में एक दोपहर में बना लें; नतीजा वही मिलेगा और प्राइवेसी आपके अपने नियंत्रण में रहेगी।</p>
+<h2>स्रोत</h2>
+<ul><li><a href="https://6mzld2.csb.app/">जाँचा जा रहा डेमो</a> — https://6mzld2.csb.app/ <em>(ऑटोमेटेड फ़ेचिंग पर HTTP 400 CodeSandbox trust-gate पेज लौटाया)</em></li><li><a href="https://github.com/justadudewhohacks/face-api.js"><code>face-api.js</code></a> — https://github.com/justadudewhohacks/face-api.js</li><li><a href="https://github.com/justadudewhohacks/face-api.js#face-recognition">face-api.js — face recognition docs (descriptors, <code>euclideanDistance</code>, 0.6 threshold)</a> — https://github.com/justadudewhohacks/face-api.js#face-recognition</li><li><a href="https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector">MediaPipe Face Detection</a> — https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector</li><li><a href="https://github.com/deepinsight/insightface">InsightFace (ArcFace मॉडल)</a> — https://github.com/deepinsight/insightface</li><li><a href="https://github.com/spiffgreen/face-comparison-api">face-comparison-api (संदर्भ कार्यान्वयन)</a> — https://github.com/spiffgreen/face-comparison-api</li></ul>
+<p><em>सत्यापन नोट: डेमो तक पहुँचा नहीं जा सका — CodeSandbox ने एक trust-gate पेज दिया जिसके लिए यूज़र की क्रिया और कुकी चाहिए। इसलिए इसकी लाइब्रेरी, अपलोड व्यवहार और आउटपुट फ़ॉर्मैट <strong>अज्ञात और असत्यापित</strong> हैं। पाइपलाइन का विवरण और 0.6 का थ्रेशोल्ड सामान्य ज्ञान है जो <code>face-api.js</code> के दस्तावेज़ों से लिया गया है, इस ऐप से नहीं, और ऊपर इसे वैसा ही बताया गया है। यह दावा कि फ़ेस रिकग्निशन की त्रुटि दर जनसांख्यिकीय समूहों में अलग होती है, साहित्य में स्थापित है, पर इस प्रविष्टि के लिए किसी विशेष अध्ययन से दोबारा सत्यापित नहीं किया गया।</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Intelligence X (intelx.io) — लीक और ऐतिहासिक वेब डेटा के लिए OSINT सर्च इंजन</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.page-head .m{margin:0}
+.langs{margin:.5rem 0 0;font-size:.9rem;color:var(--muted)}
+.langs strong{color:var(--fg)}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>Intelligence X (intelx.io) — लीक और ऐतिहासिक वेब डेटा के लिए OSINT सर्च इंजन</h1><p class="m">2026-10-10 &nbsp;·&nbsp; <a href="https://intelx.io/">साइट देखें</a></p><p class="langs"><a href="intelx.html">English</a> · <strong>हिंदी</strong></p></div><div class="entry"><h2>यह क्या है</h2>
+<p>लीक हुए, आर्काइव किए गए और ऐतिहासिक डेटा के लिए एक सर्च इंजन, जिसे Intelligence X चलाता है। यह <strong>200 अरब से ज़्यादा रिकॉर्ड</strong> इंडेक्स करता है — पेस्ट साइटें (ऐतिहासिक वाली भी), डार्कनेट (Tor और I2P), WikiLeaks और Cryptome, उत्तर कोरिया और रूस की सरकारी साइटें, डेटा लीक, WHOIS, और बाक़ी सब कुछ के लिए एक "Dumpster" बकेट।</p>
+<p>सबसे ज़रूरी बात यह समझना है कि <strong>यह फ़ुल-टेक्स्ट सर्च नहीं करता</strong>। आप "John Doe" या "American Airlines" नहीं खोज सकते — ऐसा करने पर एरर आता है। आप <strong>selector</strong> से खोजते हैं, और यह असामान्य रूप से चौड़ा सेट सपोर्ट करता है: ईमेल पता, डोमेन (<code>*.example.com</code> जैसे वाइल्डकार्ड के साथ), URL, IP/CIDR (IPv4 और IPv6), फ़ोन नंबर, Bitcoin और Ethereum पते, MAC पता, IPFS हैश, क्रेडिट कार्ड नंबर, SSN, IBAN, और UUID व SimHash जैसे आंतरिक प्रकार।</p>
+<h2>यह क्यों मायने रखता है</h2>
+<p>दो फ़ीचर इसे सिर्फ़ लीक-लुकअप साइट से ज़्यादा बनाते हैं:</p>
+<ul><li><strong>Phonebook।</strong> जब आपके पास सिर्फ़ एक डोमेन हो, तो Phonebook उसे उसके अंदर के ईमेल पतों, URLs और डोमेन में खोल देता है — यही क्लासिक "कंपनी है, इंसान चाहिए" वाला क़दम है। यह <code>phonebook.cz</code> पर चलता है और paid टियर का फ़ीचर है।</li><li><strong>ऐतिहासिक प्रतियाँ।</strong> लीक और आर्काइव किए गए दस्तावेज़ों के लिए यह Wayback Machine जैसा है; आप किसी साइट या दस्तावेज़ में समय में पीछे जा सकते हैं, और यही इसे हटाई जा चुकी सामग्री की जाँच में काम का बनाता है।</li></ul>
+<p>व्यावहारिक पक्ष भी सँभाला गया है: आर्काइव किए गए HTML, PDF और Word फ़ाइलों का इनलाइन प्रीव्यू (साइट छोड़े बिना, डार्कनेट सामग्री समेत), बकेट/टाइप/तारीख़ के हिसाब से स्टैटिस्टिक्स फ़िल्टर, CSV/ZIP एक्सपोर्ट, और ईमेल अलर्ट।</p>
+<p><strong>Identity Portal</strong> गंभीर काम के लिए अलग प्रोडक्ट है — यह पूरी फ़ाइलों का प्रीव्यू दिखाने के बजाय हर वह लाइन दिखाता है जहाँ सर्च टर्म आता है, लीक हुए अकाउंट CSV में एक्सपोर्ट करता है (पासवर्ड टाइप/हैश विश्लेषण के साथ), और रिवर्स लुकअप तथा stealer-log एक्सपोर्ट जोड़ता है।</p>
+<h2>इस्तेमाल कैसे करें</h2>
+<ol><li><strong>साइन अप करें</strong> https://intelx.io/signup पर। बिना रजिस्ट्रेशन दिन में सिर्फ़ दो खोजें मिलती हैं और ज़्यादातर डेटा दिखता ही नहीं, इसलिए असली शुरुआत अकाउंट से होती है।</li><li><strong>मज़बूत selector चुनें।</strong> पहले रेकी करें। डोमेन, ईमेल, IP या क्रिप्टो पता चलेगा; किसी व्यक्ति का नाम नहीं।</li><li><strong>Phonebook इस्तेमाल करें</strong> जब डोमेन हो पर पता न हो।</li><li><strong>स्टैटिस्टिक्स पैनल से फ़िल्टर करें</strong> (खोज के बाद ऊपर-बाएँ) या Advanced मेनू से, न कि रिज़ल्ट स्क्रॉल करते हुए।</li><li><strong>ऑटोमेट या अलर्ट लगाएँ।</strong> एक <a href="https://help.intelx.io/api/">Search API</a> दर्ज है — पर उस पर कुछ बनाने से पहले नीचे लाइसेंस की शर्तें पढ़ें। अलर्ट रोज़/साप्ताहिक/मासिक आते हैं; मासिक सुझाया जाता है क्योंकि नए इंडेक्स हुए रिज़ल्ट पीछे की तारीख़ से जुड़ते हैं।</li></ol>
+<h3>टियर</h3>
+<table><thead><tr><th>टियर</th><th>Selector खोजें</th><th>Phonebook</th><th>नोट</th></tr></thead><tbody><tr><td>Public (लॉगिन नहीं)</td><td>2 / दिन</td><td>—</td><td>ज़्यादातर डेटा छिपा</td></tr><tr><td><strong>Free (साइन अप)</strong></td><td><strong>50 / दिन</strong></td><td>—</td><td>न डाउनलोड, न एक्सपोर्ट, न API एक्सेस</td></tr><tr><td>Academia</td><td>50 / दिन</td><td>25 / दिन</td><td>यूनिवर्सिटी और स्कूलों के लिए</td></tr><tr><td>Free Trial (7 दिन)</td><td>50 / दिन</td><td>—</td><td>20 एक्सपोर्ट/दिन, डाउनलोड चालू; <strong>7 दिन बाद Free पर आ जाता है</strong></td></tr><tr><td>Researcher</td><td>200 / दिन</td><td>25 / दिन</td><td>€2,500 / साल</td></tr><tr><td>API</td><td>500 / दिन</td><td>100 / दिन</td><td>€7,000 / साल</td></tr><tr><td>Identity Portal</td><td>500 / दिन</td><td>100 / दिन</td><td>€10,000 / साल — लाइन-बाय-लाइन रिज़ल्ट, रिवर्स लुकअप, stealer-log एक्सपोर्ट सिर्फ़ इसी में</td></tr><tr><td>Enterprise</td><td>5000+ / दिन</td><td>2500+ / दिन</td><td>€20,000 / साल, कई यूज़र</td></tr></tbody></table>
+<p><em>(आँकड़े 2026-10-10 को विक्रेता के प्रोडक्ट पेज से पढ़े गए — बजट बनाने से पहले जाँच लें, टियर बदलते रहते हैं।)</em></p>
+<h3>मुफ़्त टियर की पेचीदगियाँ</h3>
+<ul><li><strong>Free</strong> टियर में <strong>न डाउनलोड है, न एक्सपोर्ट</strong> — देख सकते हैं, पर रिज़ल्ट बाहर निकालना paid फ़ीचर है। ज़्यादातर असली काम के लिए मुफ़्त टियर एक छँटाई का औज़ार है, डेटा स्रोत नहीं।</li><li><strong>Free trial में API एक्सेस नहीं मिलता।</strong> API टियर अलग लाइसेंस हैं।</li><li>"License key" की ज़रूरत पड़ सकती है; बिना की वाले अकाउंट पर खोज करने पर <em>"Invalid License Key"</em> दिखता है।</li></ul>
+<h2>सीमाएँ और जोखिम</h2>
+<ul><li><strong>क़ानूनी और नैतिक जोखिम असली है।</strong> यह <strong>लीक डेटा और stealer logs</strong> इंडेक्स करता है — उन लोगों के क्रेडेंशियल और निजी डेटा का, जिन्होंने कभी सहमति नहीं दी। पूछना और उस सामग्री का हक़दार होना एक बात नहीं है। कई देश गैरक़ानूनी तरीक़े से हासिल निजी डेटा रखने या प्रोसेस करने पर रोक लगाते हैं, और "मुझे यह सर्च इंजन में मिला" कोई बचाव नहीं है। रिज़ल्ट को <em>सत्यापन के संकेत</em> मानें, और लीक हुए क्रेडेंशियल पर कार्रवाई से पहले — और उन्हें <em>टेस्ट</em> करने से पहले भी, जो ख़ुद अनधिकृत एक्सेस हो सकता है — क़ानूनी सलाह लें।</li><li><strong>जो क्रेडेंशियल मिलें उन्हें टेस्ट न करें।</strong> लीक हुए पासवर्ड से किसी अकाउंट में लॉगिन करना आमतौर पर अपराध है, चाहे पासवर्ड कैसे भी मिला हो।</li><li><strong>API fair-use है और लाइसेंस से बँधी है।</strong> प्रोडक्ट पेज fair use को यूँ परिभाषित करता है: <em>"यूज़र API का ऐसा इस्तेमाल नहीं करेगा जो हमारी सेवा-शर्तों के ख़िलाफ़ हो, जैसे mass scraping"</em>, और साफ़ कहता है कि <strong>तीसरे पक्ष के प्रोडक्ट में API जोड़ने का अधिकार सिर्फ़ API, Identity Portal और Enterprise लाइसेंस देते हैं</strong>। Researcher और Free नहीं देते। मुफ़्त टियर की API पर कोई प्रोडक्ट बनाना लाइसेंस का उल्लंघन है।</li><li><strong>मुफ़्त टियर एक्सपोर्ट नहीं कर सकता, इसलिए उसे सार्थक रूप से ऑटोमेट नहीं किया जा सकता</strong> — यह जानबूझकर है, भूल नहीं।</li><li><strong>डेटा पुराना, दोहराया हुआ या ग़लत श्रेय वाला हो सकता है।</strong> लीक डंप गंदे होते हैं: इंडेक्स होते समय रिकॉर्ड पीछे की तारीख़ के जुड़ते हैं, प्रविष्टियाँ बकेटों में दोहराई जाती हैं, और ईमेल पर मैच का मिलना यह साबित नहीं करता कि व्यक्ति ने वह सेवा इस्तेमाल की या डेटा ताज़ा है। विक्रेता ख़ुद मासिक अलर्ट चक्र सुझाता है, ठीक इसलिए कि इंडेक्सिंग पीछे चलती है।</li><li><strong>किसी व्यक्ति का ईमेल या डोमेन खोजना प्राइवेसी-संवेदनशील काम है।</strong> आपकी भूमिका और क्षेत्राधिकार के हिसाब से इसके लिए वैध आधार चाहिए हो सकता है — टूल सार्वजनिक होना इसे अपने आप जायज़ नहीं बनाता।</li><li><strong>मुफ़्त टियर सिर्फ़ देखने तक है और छोटा है।</strong> 50 selector/दिन उदार लगता है जब तक यह समझ न आए कि बिना एक्सपोर्ट के हाथ से कॉपी करना पड़ेगा; इसी हिसाब से योजना बनाएँ, बाद में चौंकें नहीं।</li></ul>
+<h2>निष्कर्ष</h2>
+<p><strong>Selector-आधारित जाँच के लिए सबसे मज़बूत मुफ़्त OSINT शुरुआत, पर सीमा साफ़ है — "देखो, उठाओ मत"।</strong></p>
+<p><strong>इसके लिए इस्तेमाल करें</strong>: यह जाँचने के लिए कि कोई ईमेल या डोमेन ज्ञात लीक में है या नहीं, Phonebook के ज़रिए डोमेन को ईमेल पतों में खोलने के लिए, अपना ख़ुद का एक्सपोज़र देखने के लिए, हटाई गई सामग्री की ऐतिहासिक प्रतियाँ ढूँढ़ने के लिए, और अकादमिक/सुरक्षा शोध के लिए जहाँ आपको वैध आधार समझ में आता हो।</p>
+<p><strong>इसके लिए न करें</strong>: क्रेडेंशियल जुटाना, मिले पासवर्ड टेस्ट करना, बड़े पैमाने पर निजी डेटा इकट्ठा करना, या मुफ़्त/Researcher API पर कोई प्रोडक्ट बनाना — ये क्रमशः गैरक़ानूनी या लाइसेंस-भंग हैं।</p>
+<p><strong>ईमानदार ढाँचा</strong>: मुफ़्त टियर <em>ख़ास selectors देखने</em> का असली शोध औज़ार है, और जैसे ही आपको वॉल्यूम या एक्सपोर्ट चाहिए, आप €2,500/साल के दायरे में पहुँच जाते हैं। बजट बनाएँ या अपेक्षाएँ घटाएँ।</p>
+<h2>स्रोत</h2>
+<ul><li><a href="https://intelx.io/">Intelligence X</a> — https://intelx.io/</li><li><a href="https://intelx.io/product">Intelligence X — Product tiers and pricing</a> — https://intelx.io/product</li><li><a href="https://help.intelx.io/get-started/">Intelligence X — Get started</a> — https://help.intelx.io/get-started/</li><li><a href="https://help.intelx.io/api/limits/">Intelligence X — API limits</a> — https://help.intelx.io/api/limits/</li><li><a href="https://help.intelx.io/get-started/selector/">Intelligence X — Selectors</a> — https://help.intelx.io/get-started/selector/</li><li><a href="https://phonebook.cz">Phonebook</a> — https://phonebook.cz</li></ul>
+<p><em>सत्यापन नोट: टूल और प्राइसिंग पेज 2026-10-10 को सीधे विक्रेता से लाए गए और ऊपर के टियर आँकड़े उनकी तुलना तालिका से लिखे गए हैं, यानी ये विक्रेता द्वारा प्रकाशित तथ्य हैं, मार्केटिंग दावे नहीं। कोई अकाउंट नहीं बनाया गया और कोई खोज नहीं चलाई गई, इसलिए मुफ़्त टियर का व्यवहार (रेट लिमिटिंग, कौन-सा डेटा दिखता है) विक्रेता के दस्तावेज़ों से लिखा है, टेस्टिंग से नहीं।</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmailPro — अस्थायी Gmail और Outlook इनबॉक्स</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.page-head .m{margin:0}
+.langs{margin:.5rem 0 0;font-size:.9rem;color:var(--muted)}
+.langs strong{color:var(--fg)}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>SmailPro — अस्थायी Gmail और Outlook इनबॉक्स</h1><p class="m">2026-10-10 &nbsp;·&nbsp; <a href="https://smailpro.com/temporary-email">साइट देखें</a></p><p class="langs"><a href="smailpro.html">English</a> · <strong>हिंदी</strong></p></div><div class="entry"><h2>यह क्या है</h2>
+<p>एक डिस्पोज़ेबल-ईमेल सेवा जो <strong>असली Gmail और Outlook पते</strong> देती है, फेंकने वाले डोमेन के पतों के बजाय। यह SONJJ प्रोडक्ट परिवार का हिस्सा है (जिसमें YChecker, UGener, SMSer, StoreGmail, CardGener भी शामिल हैं) और सब एक ही क्रेडिट वॉलेट साझा करते हैं।</p>
+<h2>यह क्यों मायने रखता है</h2>
+<p>किसी साइनअप फ़ॉर्म पर "टेम्प मेल" पता फेल होने की आम वजह एक <strong>डोमेन ब्लॉकलिस्ट</strong> होती है। Temp-mail.com, Guerrilla Mail और Maildrop जैसी सेवाएँ सामान्य डिस्पोज़ेबल डोमेन पर पते देती हैं, और साइनअप फ़ॉर्म उन डोमेन को ब्लॉकलिस्ट कर देते हैं — यानी वेरिफ़िकेशन मेल भेजे जाने से पहले ही रद्द हो जाता है। यह फेलियर चुपचाप होता है: कोई एरर नहीं, कोई बाउंस नहीं, बस एक फ़ॉर्म जो कभी वेरिफ़ाई नहीं होता। <em>(कौन-से प्लेटफ़ॉर्म ऐसा करते हैं — Salesforce और HubSpot — यह विक्रेता के खुद के पेज से है: <strong>(vendor claim — unverified)</strong>।)</em></p>
+<p>चूँकि SmailPro <code>@gmail.com</code> और <code>@outlook.com</code> पते देता है, यह डोमेन-आधारित उन ब्लॉकलिस्टों को पार कर जाता है जो आम टेम्प मेल को मार देती हैं। यही इसका पूरा यूएसपी है, और यह एक असली तंत्र है। <em>(विक्रेता जो पूल साइज़ और स्वीकृति दर बताता है वह <strong>(vendor claim — unverified)</strong> है; "सीमाएँ और जोखिम" देखें।)</em></p>
+<h2>इस्तेमाल कैसे करें</h2>
+<h3>मुफ़्त रास्ता (ब्राउज़र, मैन्युअल)</h3>
+<ol><li>https://smailpro.com/temporary-email खोलें</li><li>एक इनबॉक्स बनाएँ — प्रोवाइडर चुनें (Gmail / Outlook / अन्य)।</li><li>पेज आपको पता दे देगा; टैब खुला रखें।</li><li>साइनअप फ़ॉर्म में पता डालें, फिर SmailPro इनबॉक्स से कोड पढ़ें।</li></ol>
+<p>Cloudflare Turnstile चैलेंज आप ब्राउज़र में खुद हल करते हैं। एक Chrome/Firefox/Edge एक्सटेंशन और एक Android ऐप भी है।</p>
+<h3>ऑटोमेशन रास्ता (API)</h3>
+<p>ऑथ एक ही <code>X-Api-Key</code> हेडर से होती है (की my.sonjj.com डैशबोर्ड से)। न OAuth, न SDK, न सेशन कुकी।</p>
+<p>तीन कॉल:</p>
+<table><thead><tr><th>चरण</th><th>कॉल</th></tr></thead><tbody><tr><td>1</td><td><strong>इनबॉक्स बनाएँ</strong> → एक असली Gmail या Outlook पता मिलता है</td></tr><tr><td>2</td><td><strong>इनबॉक्स पोल करें</strong> — नए संदेशों के लिए (IMAP सिंक हर 5–10 सेकंड में)</td></tr><tr><td>3</td><td><strong>संदेश पढ़ें</strong> → पूरा बॉडी, या सीधे OTP निकालें</td></tr></tbody></table>
+<p>API जानबूझकर <strong>सिर्फ़ प्राप्त करने के लिए</strong> है — यह मेल भेज नहीं सकता। प्रति कॉल लागत: बनाना 1 क्रेडिट, पोल 0.05 क्रेडिट, पढ़ना 1–2 क्रेडिट। बेस दर $1.00 / 1,000 क्रेडिट, स्केल पर $0.30 / 1,000 तक <strong>(vendor claim — unverified)</strong>; क्रेडिट कभी एक्सपायर नहीं होते और शुल्क सिर्फ़ HTTP 200 पर लगता है <strong>(vendor claim — unverified)</strong>।</p>
+<h3>Python रैपर (अनौपचारिक)</h3>
+<p><code>pip install smailpro-api</code> — AsmSafone का कम्युनिटी रैपर (<a href="https://pypi.org/project/smailpro-api/">PyPI</a>, <a href="https://github.com/AsmSafone/smailpro-api">GitHub</a>)।</p>
+<pre><code>from smailpro_api import SmailProAPI, Provider
+
+api = SmailProAPI(provider=Provider.GOOGLE, solver_url=&quot;http://localhost:8000&quot;)
+email_info = api.create_email()
+inbox = api.fetch_inbox(email_info)          # थोड़ा इंतज़ार करने के बाद
+msg = api.fetch_message(email_info, inbox&quot;messages&quot;[&quot;mid&quot;])</code></pre>
+<p><strong>चेतावनी</strong>: रैपर का मुख्य फ़ीचर "ऑटोमेटेड CAPTCHA बायपास" बताया गया है, लेकिन यह खुद कोई बायपास नहीं करता — इसे <strong>एक बाहरी Cloudflare Turnstile सॉल्वर सेवा चाहिए</strong> (यह Boterdrop-Solver सुझाता है) जो <code>solver_url</code> पर चल रही हो। यानी यह शुद्ध पायथन इंस्टॉल नहीं है; एक Docker वाले सॉल्वर का इंतज़ाम रखें।</p>
+<p>रैपर जो प्रोवाइडर देता है:</p>
+<table><thead><tr><th>Provider</th><th>डिफ़ॉल्ट डोमेन</th><th>अन्य डोमेन</th></tr></thead><tbody><tr><td><code>google</code></td><td>gmail.com</td><td>googlemail.com</td></tr><tr><td><code>microsoft</code></td><td>outlook.com</td><td>hotmail.com, outlook.kr, outlook.fr, outlook.com.vn, outlook.co.id, outlook.co.th, outlook.com.ar, outlook.co.il</td></tr><tr><td><code>other</code></td><td>melbourne.edu.pl</td><td>sydney.edu.pl, tokyo.edu.pl, storegmail.net</td></tr></tbody></table>
+<h2>सीमाएँ और जोखिम</h2>
+<ul><li><strong>ये इनबॉक्स निजी नहीं हैं।</strong> एक "अस्थायी Gmail" कोई नया Gmail नहीं है — यह उस मेलबॉक्स का क्रेडेंशियल है जिसे विक्रेता भी बना सकता है और एक्सेस कर सकता है। इसे कभी वहाँ इस्तेमाल न करें जहाँ मेल संवेदनशील हो या अकाउंट रिकवरी मायने रखती हो — पता साझा ढाँचा है और दोबारा किसी और को दिया जा सकता है।</li><li><strong>विक्रेता के आँकड़े मार्केटिंग हैं।</strong> रोटेशन में ~14,000 अकाउंट (~3,000 Gmail + ~11,000 Outlook), "400,000+ संदेश प्राप्त", "10 सेकंड से कम में OTP डिलीवरी", "उच्च स्वीकृति दर" — सब SmailPro के खुद के पेज से <strong>(vendor claim — unverified)</strong>, जिसे वह खुद <em>operational metrics, not hard guarantees</em> कहता है। कोई स्वतंत्र सत्यापन नहीं। जब तक अपने असली टारगेट फ़ॉर्म पर टेस्ट न करें, स्वीकृति को अनजान मानें।</li><li><strong>सिर्फ़ प्राप्त करने के लिए।</strong> न भेजना, न अटैचमेंट। आउटबाउंड मेल या अटैचमेंट हैंडलिंग टेस्ट करने के लिए यह काम नहीं आएगा।</li><li><strong>स्वीकृति की अभी भी कोई गारंटी नहीं।</strong> असली Gmail/Outlook <em>डोमेन</em> ब्लॉकलिस्ट पार कर लेता है, लेकिन फ़ॉर्म बिहेवियरल जाँच, फ़ोन वेरिफ़िकेशन, IP प्रतिष्ठा और रिस्क स्कोरिंग भी इस्तेमाल करते हैं। प्रोवाइडर-डोमेन पता इन्हें नहीं हराता।</li><li><strong>सेवा की शर्तों का जोखिम।</strong> कई प्लेटफ़ॉर्म अकाउंट बनाने के लिए डिस्पोज़ेबल पतों को मना करते हैं। इससे बड़े पैमाने पर अकाउंट बनाना या वेरिफ़ाई करना शर्तों का उल्लंघन है और सेवा व नीयत के हिसाब से धोखाधड़ी भी हो सकता है। यहाँ इसे वैध इस्तेमाल के लिए दर्ज किया गया है: अपने ही साइनअप फ़्लो की QA/टेस्टिंग, और एक-बार के साइनअप जहाँ प्लेटफ़ॉर्म अनुमति देता हो।</li><li><strong>पैसे और मीटर वाला।</strong> मुफ़्त ब्राउज़र फ़्लो रेट-लिमिटेड है (टूल पेज पर "Limit /"); प्रोग्रामेटिक कुछ भी क्रेडिट लेता है और दूसरे डोमेन (<code>my.sonjj.com</code>) पर अकाउंट माँगता है।</li><li><strong>दस्तावेज़ बाहर रहते हैं।</strong> smailpro.com पर <code>/api</code> पेज जानबूझकर कोई एंडपॉइंट या कोड सैंपल नहीं देता — असली रेफ़रेंस <code>sonjj.com</code> पर है, जो अलग डोमेन है। दस्तावेज़, कीमत और पूल की स्थिति वहाँ बिना सूचना बदल सकते हैं, उस पेज पर नहीं जिसे आपने बुकमार्क किया था।</li></ul>
+<h2>निष्कर्ष</h2>
+<p><strong>सचमुच उपयोगी, लेकिन एक ही ख़ास काम के लिए</strong>: ऐसे फ़ॉर्म से वेरिफ़िकेशन मेल निकालना जो डिस्पोज़ेबल डोमेन अस्वीकार करते हैं, और सिर्फ़ उन मामलों में जहाँ आपको ऐसा करने की अनुमति है। असली Gmail/Outlook वाला तंत्र ही इसका फ़र्क़ है और यह एक असली, वरना उलझाने वाली समस्या हल करता है (चुपचाप गिराया गया वेरिफ़िकेशन मेल)।</p>
+<p><strong>यह नहीं है</strong> कोई प्राइवेसी टूल, कोई अनामिता टूल, और कोई प्रोडक्शन ईमेल प्रोवाइडर। ऑटोमेशन के लिए पैसे वाला क्रेडिट बैलेंस और एक अलग CAPTCHA सॉल्वर — दोनों का बजट रखें; अगर सिर्फ़ कभी-कभार कोड चाहिए तो मुफ़्त ब्राउज़र फ़्लो सस्ता रास्ता है।</p>
+<h2>स्रोत</h2>
+<ul><li><a href="https://smailpro.com/temporary-email">SmailPro temporary email tool</a> — https://smailpro.com/temporary-email</li><li><a href="https://smailpro.com/api">SmailPro API overview</a> — https://smailpro.com/api</li><li><a href="https://pypi.org/project/smailpro-api/">smailpro-api on PyPI</a> — https://pypi.org/project/smailpro-api/</li><li><a href="https://github.com/AsmSafone/smailpro-api">smailpro-api on GitHub</a> — https://github.com/AsmSafone/smailpro-api</li><li><a href="https://chromewebstore.google.com/detail/temp-mail-by-smailpro/hpjiofbbhffhfeiioadkedhalpijppnk">Temp Mail by SmailPro — Chrome Web Store</a> — https://chromewebstore.google.com/detail/temp-mail-by-smailpro/hpjiofbbhffhfeiioadkedhalpijppnk</li></ul></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

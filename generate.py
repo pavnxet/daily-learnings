@@ -79,6 +79,9 @@ footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
             color:var(--muted);font-size:.88rem}
 .page-head{margin-bottom:2rem}
 .page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.page-head .m{margin:0}
+.langs{margin:.5rem 0 0;font-size:.9rem;color:var(--muted)}
+.langs strong{color:var(--fg)}
 .back{font-size:.88rem}
 """
 
@@ -269,7 +272,7 @@ def ref_link(md, name):
 
 
 def body_of(md):
-    """Drop the title line and the metadata bullet block; keep the real sections."""
+    """Drop the title and metadata block, normalise link syntax, keep the sections."""
     lines = md.split("\n")
     start = 0
     for n, line in enumerate(lines):
@@ -277,31 +280,66 @@ def body_of(md):
             start = n
             break
     text = "\n".join(lines[start:])
-    # Sources entries written as bare URLs render as unlinked text; linkify them.
+    # Sources entries written as bare URLs would render as unlinked text.
     text = re.sub(r"^(https?://\S+)$", r"[\1](\1)", text, flags=re.M)
     text = re.sub(r"^-\s+(https?://\S+)$", r"- [\1](\1)", text, flags=re.M)
+    # Normalise the vendor-claim tag first, so the generator's own matcher and
+    # hand-written variants all end up identical in the output.
+    text = re.sub(r"\(\s*vendor claims?\b[^)]*\)", "(vendor claim — unverified)", text)
+    text = re.sub(r"\[\[([^\]]+)\]\]\(([^)]+)\)", r"[\1](\2)", text)
+    text = re.sub(r"\[([^\]]+)\]\[([^\]]+)\]", lambda m: ref_link(text, m.group(2)) or m.group(1), text)
+    text = re.sub(r"^\[([^\]]+)\]:\s*\S+\s*$", "", text, flags=re.M)
     return text
 
 
-def build_entry(md, rows):
-    """Return the inner HTML for one entry page (without the page shell)."""
-    md = re.sub(r"\[\[([^\]]+)\]\]\(([^)]+)\)", r"[\1](\2)", md)
-    md = re.sub(r"\s*\(vendor claim[^)]*\)", " (vendor claim — unverified)", md)
-    md = re.sub(r"\[([^\]]+)\]\[([^\]]+)\]", lambda m: ref_link(md, m.group(2)) or m.group(1), md)
-    md = re.sub(r"^\[([^\]]+)\]:\s*\S+\s*$", "", md, flags=re.M)
-    rows.append(
-        {
-            "title": re.search(r"^#\s+(.*)$", md, re.M).group(1).strip(),
-            "file": "tools/",
-            "summary": strip_vendor_tags(field(md, "Summary") or field(md, "What it is")),
-            "date": field(md, "Logged", DEFAULT_DATE),
-            "url": field(md, "Site"),
-            "html": convert(body_of(md)),
-        }
-    )
+# --- translations -----------------------------------------------------------
+# Entries are authored in English (tools/<slug>.md). A translation is an optional
+# companion file (tools/<slug>.<lang>.md) holding a full translated page for the
+# same entry. Nothing is translated at runtime: the browser only ever fetches
+# finished HTML shipped with the site, so no model download is ever triggered.
+LANGS = {"hi": "हिंदी"}
 
 
-def shell(title, body, back=True):
+def load_entry(path, lang="en"):
+    """Parse one authored page (an English source or a translation of one)."""
+    md = path.read_text(encoding="utf-8")
+    title = re.search(r"^#\s+(.*)$", md, re.M)
+    summary = field(md, f"Summary-{lang}") if lang != "en" else field(md, "Summary")
+    return {
+        "lang": lang,
+        "title": title.group(1).strip() if title else path.stem,
+        "summary": strip_vendor_tags(summary or field(md, "Summary") or field(md, "What it is")),
+        "date": field(md, "Logged", DEFAULT_DATE),
+        "url": field(md, "Site"),
+        "html": convert(body_of(md)),
+    }
+
+
+def load_entry_set(slug):
+    """Load an entry plus every available translation of it."""
+    pages = {"en": load_entry(SRC / f"{slug}.md", "en")}
+    for lang in LANGS:
+        alt = SRC / f"{slug}.{lang}.md"
+        if alt.exists():
+            pages[lang] = load_entry(alt, lang)
+    return pages
+
+
+def lang_toggle(slug, current, pages):
+    """Inline language links; the current language is plain text, not a link."""
+    links = []
+    for code, label in [("en", "English")] + list(LANGS.items()):
+        if code not in pages:
+            continue
+        name = f"{slug}.html" if code == "en" else f"{slug}.{code}.html"
+        if code == current:
+            links.append(f"<strong>{label}</strong>")
+        else:
+            links.append(f'<a href="{name}">{label}</a>')
+    return f'<p class="langs">{" · ".join(links)}</p>' if len(links) > 1 else ""
+
+
+def shell(title, body, back=True, lang="en"):
     nav = (
         f'<p class="back"><a href="{SITE}/">← All learnings</a> &nbsp;·&nbsp; '
         f'<a href="{REPO}">Source on GitHub</a></p>'
@@ -309,7 +347,7 @@ def shell(title, body, back=True):
         else ""
     )
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="{lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -334,32 +372,42 @@ def shell(title, body, back=True):
 
 
 def main():
-    entries = []
+    sets = {}
     for path in sorted(SRC.glob("*.md")):
-        rows = []
-        build_entry(path.read_text(encoding="utf-8"), rows)
-        entry = rows[0]
-        entry["slug"] = path.stem
-        entries.append(entry)
+        if path.name.endswith(tuple(f".{lang}.md" for lang in LANGS)):
+            continue  # a translation, loaded with its English source below
+        sets[path.stem] = load_entry_set(path.stem)
 
     (OUT / "tools").mkdir(parents=True, exist_ok=True)
 
-    for entry in entries:
-        head = (
-            f'<div class="page-head"><h1>{inline(entry["title"])}</h1>'
-            f'<p class="m">{html.escape(entry["date"])}'
-            + (f' &nbsp;·&nbsp; <a href="{html.escape(entry["url"])}">visit site</a>' if entry["url"] else "")
-            + "</p></div>"
-        )
-        page = shell(entry["title"], head + f'<div class="entry">{entry["html"]}</div>')
-        (OUT / "tools" / f'{entry["slug"]}.html').write_text(page, encoding="utf-8")
+    written = 0
+    for slug, pages in sets.items():
+        for code, entry in pages.items():
+            name = f"{slug}.html" if code == "en" else f"{slug}.{code}.html"
+            head = (
+                f'<div class="page-head"><h1>{inline(entry["title"])}</h1>'
+                f'<p class="m">{html.escape(entry["date"])}'
+                + (f' &nbsp;·&nbsp; <a href="{html.escape(entry["url"])}">{"साइट देखें" if code != "en" else "visit site"}</a>' if entry["url"] else "")
+                + "</p>"
+                + lang_toggle(slug, code, pages)
+                + "</div>"
+            )
+            page = shell(
+                entry["title"], head + f'<div class="entry">{entry["html"]}</div>', lang=code
+            )
+            (OUT / "tools" / name).write_text(page, encoding="utf-8")
+            written += 1
 
     cards = "\n".join(
-        f'<a class="card" href="tools/{e["slug"]}.html">'
-        f'<div class="t">{inline(e["title"])}</div>'
-        f'<div class="d">{inline(e["summary"])}</div>'
-        f'<div class="m">{html.escape(e["date"])}</div></a>'
-        for e in sorted(entries, key=lambda x: x["date"], reverse=True)
+        f'<a class="card" href="tools/{slug}.html">'
+        f'<div class="t">{inline(pages["en"]["title"])}</div>'
+        f'<div class="d">{inline(pages["en"]["summary"])}</div>'
+        f'<div class="m">{html.escape(pages["en"]["date"])}'
+        + ("　·　हिंदी" if len(pages) > 1 else "")
+        + "</div></a>"
+        for slug, pages in sorted(
+            sets.items(), key=lambda kv: kv[1]["en"]["date"], reverse=True
+        )
     ) or '<p class="empty">No entries yet.</p>'
 
     body = f"""<header class="site">
@@ -377,7 +425,9 @@ def main():
     (OUT / "index.html").write_text(
         shell("Daily Learnings", body, back=False), encoding="utf-8"
     )
-    print(f"built {len(entries)} entry page(s) + docs/index.html")
+    translated = sum(1 for pages in sets.values() for code in pages if code != "en")
+    print(f"built {len(sets)} entr{'y' if len(sets) == 1 else 'ies'} "
+          f"({written} page(s), {translated} translation(s)) + docs/index.html")
 
 
 if __name__ == "__main__":

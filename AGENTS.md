@@ -73,7 +73,29 @@ Use `web_search` to find candidates and `web_fetch` to read the actual pages —
 
 1. Create the file in `tools/`, add its `Summary` line.
 2. Add a numbered row to the **Index** table in `README.md`, and add the entry to the `What's in here`/index lists if the count changes.
-3. Run `python generate.py` and confirm it reports the expected number of entry pages.
-4. Append a dated entry to [./learning/summary.md](./learning/summary.md).
-5. Fold any generalizable insight (a pattern that applies beyond this one tool) into [./learning/learning.md](./learning/learning.md).
+3. Write the Hindi translation as `tools/<slug>.hi.md` (see below).
+4. Run `python generate.py` and confirm it reports the expected number of pages **and translations**.
+5. Append a dated entry to [./learning/summary.md](./learning/summary.md).
+6. Fold any generalizable insight (a pattern that applies beyond this one tool) into [./learning/learning.md](./learning/learning.md).
+
+---
+
+## Translation protocol (MANDATORY)
+
+Every entry ships in **English and Hindi**. This is done at *build* time by the agent, never at runtime — no visitor ever downloads a model, and there is no translation API. Static pre-built HTML is the whole point, so do not add client-side translation.
+
+### Creating a translation
+
+- Author it as `tools/<slug>.hi.md`, a sibling of `tools/<slug>.md`.
+- **Same structure, same order.** Only the prose is translated. Keep the `#` title, all `##` sections in the same sequence, the same tables (same rows/columns), the same `Site` / `Logged` / `Category` metadata values, and the same code blocks. The generator pairs the two pages; a structural mismatch shows up as a broken-looking toggle page.
+- **Never translate technical substance.** Leave in English: code blocks and commands, model IDs and endpoint paths, URLs and filenames, product names (Gmail, Outlook, FastAPI, OpenAI), and the literal string `vendor claim`. Translating `` `lc_router.py` `` or `POST /v1/chat/completions` makes the entry wrong, not bilingual.
+- **Keep inline markup intact** — `**bold**`, links, backticks, and the `(vendor claim — unverified)` tag must survive verbatim, in the same positions.
+- **Translate meaning, not words.** Use natural Hindi technical register: loanwords in Devanagari where that is how Indian technical writing actually reads (डोमेन, ब्लॉकलिस्ट, वेरिफ़िकेशन, क्रेडेंशियल), native Hindi where it reads better (सीमाएँ और जोखिम, निष्कर्ष, स्रोत).
+- **Section headings are standardised**: यह क्या है / यह क्यों मायने रखता है / इस्तेमाल कैसे करें / सीमाएँ और जोखिम / निष्कर्ष / स्रोत.
+- **No runtime translation libraries. Ever.** Adding `@huggingface/transformers` or any in-browser translator contradicts the requirement that visitors download nothing.
+- **Say so when you cannot verify a translation.** Never claim a Hindi page was proofread if it was not.
+
+### Adding another language later
+
+Add the code and its label to `LANGS` in `generate.py` (e.g. `{"hi": "हिंदी", "mr": "मराठी"}`) and supply `tools/<slug>.<code>.md` for the entries you want translated. The toggle, the `<html lang>` attribute and the index markers are generated automatically; entries without that file are simply left in English with no toggle.
 

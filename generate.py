@@ -9,6 +9,7 @@ Pages must be published from the /docs folder on main.
 
 import html
 import re
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -300,6 +301,28 @@ def body_of(md):
 LANGS = {"hi": "हिंदी"}
 
 
+def added_at(path):
+    """When this entry was first committed, else its file time.
+
+    Order is derived, not hand-maintained. File mtime is wrong on its own:
+    editing an old entry bumps it to the top, and files written in the same
+    batch share a timestamp. Git's first-commit time is stable across edits.
+    A file not yet committed (i.e. the one just written) has no history, so
+    its mtime is used -- which is always later than any existing entry's commit.
+    """
+    try:
+        out = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--follow", "--format=%ct", "--", str(path)],
+            cwd=ROOT, capture_output=True, text=True, timeout=10,
+        )
+        stamps = [line for line in out.stdout.split() if line.isdigit()]
+        if stamps:
+            return int(stamps[-1])  # earliest commit that added the file
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return path.stat().st_mtime
+
+
 def load_entry(path, lang="en"):
     """Parse one authored page (an English source or a translation of one)."""
     md = path.read_text(encoding="utf-8")
@@ -312,6 +335,7 @@ def load_entry(path, lang="en"):
         "date": field(md, "Logged", DEFAULT_DATE),
         "url": field(md, "Site"),
         "html": convert(body_of(md)),
+        "added": added_at(path),
     }
 
 
@@ -337,6 +361,45 @@ def lang_toggle(slug, current, pages):
         else:
             links.append(f'<a href="{name}">{label}</a>')
     return f'<p class="langs">{" · ".join(links)}</p>' if len(links) > 1 else ""
+
+
+def index_order():
+    """Entry slugs in the order the README's Index table lists them.
+
+    The README table is the declared order (newest first, maintained by hand).
+    Deriving from it keeps one source of truth instead of guessing an order from
+    timestamps -- commit batches share a timestamp, and an edited entry's mtime
+    jumps to the top. Returns {} when the table is missing, in which case the
+    caller falls back to first-commit time.
+    """
+    readme = ROOT / "README.md"
+    if not readme.exists():
+        return {}
+    order, seen = {}, False
+    for line in readme.read_text(encoding="utf-8").split("\n"):
+        if line.startswith("|") and "Entry" in line:
+            seen = True
+            continue
+        if not seen:
+            continue
+        if not line.startswith("|"):
+            break
+        links = re.findall(r"\((tools/[^)]+?)\.md\)", line)
+        if links and links[0] not in order:
+            order[links[0]] = len(order)
+    return order
+
+
+def newest_first(entry):
+    """Sort key: README order first; anything unlisted sinks, newest first.
+
+    One key shape for both cases (a mix of tuple lengths fails to compare).
+    """
+    pos = entry.get("pos")
+    if pos is not None:
+        return (0, pos, 0, "")
+    day = re.search(r"\d{4}-\d{2}-\d{2}", entry.get("date") or "")
+    return (1, 0, -(entry.get("added") or 0), day.group(0) if day else "")
 
 
 def shell(title, body, back=True, lang="en"):
@@ -372,11 +435,14 @@ def shell(title, body, back=True, lang="en"):
 
 
 def main():
+    order = index_order()
     sets = {}
     for path in sorted(SRC.glob("*.md")):
         if path.name.endswith(tuple(f".{lang}.md" for lang in LANGS)):
             continue  # a translation, loaded with its English source below
-        sets[path.stem] = load_entry_set(path.stem)
+        pages = load_entry_set(path.stem)
+        pages["en"]["pos"] = order.get(f"tools/{path.stem}")
+        sets[path.stem] = pages
 
     (OUT / "tools").mkdir(parents=True, exist_ok=True)
 
@@ -406,7 +472,8 @@ def main():
         + ("　·　हिंदी" if len(pages) > 1 else "")
         + "</div></a>"
         for slug, pages in sorted(
-            sets.items(), key=lambda kv: kv[1]["en"]["date"], reverse=True
+            sets.items(),
+            key=lambda kv: newest_first(kv[1]["en"]),
         )
     ) or '<p class="empty">No entries yet.</p>'
 

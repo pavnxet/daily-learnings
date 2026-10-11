@@ -18,14 +18,18 @@ New things learned from daily routine, and new tools explored. One page per entr
 
 ## Index
 
+*Newest first.*
+
 | # | Entry | What it is | Logged |
 |---|---|---|---|
-| 1 | [SmailPro — temporary Gmail & Outlook inboxes](tools/smailpro.md) | Disposable inboxes on **real Gmail and Outlook addresses**, which clears the domain blocklists that silently kill ordinary temp-mail verification | 2026-10-10 |
-| 2 | [lucky-cat-api + radio-house-api](tools/ai-api-bridge.md) | Two local FastAPI bridges wrapping free AI chat sites (Proton Lumo, TryingOpen) into one OpenAI-compatible endpoint — ~24 models from a `baseURL` swap | 2026-10-10 |
-| 3 | [Intelligence X (intelx.io)](tools/intelx.md) | Freemium OSINT search engine over 200 billion+ records — breaches, stealer logs, pastes, darknet, historical web — searched by **selector**, not keyword | 2026-10-10 |
-| 4 | [WhatsMyName](tools/whatsmyname.md) | Community-maintained JSON dataset of 700+ sites answering "does this username exist?" — the data layer behind most username checkers | 2026-10-10 |
-| 5 | [ProxyNova anonymous email](tools/proxynova-anonymous-email.md) | No-signup web form that mails anyone from a rotating sender pool, so the recipient cannot trace it to you — capped at 5 emails/day | 2026-10-10 |
 | 6 | [Face Detection & Comparison demo](tools/face-comparison-demo.md) | Browser demo comparing two uploaded faces — a teaching example of the detect → align → embed → compare pipeline | 2026-10-10 |
+| 5 | [ProxyNova anonymous email](tools/proxynova-anonymous-email.md) | No-signup web form that mails anyone from a rotating sender pool, so the recipient cannot trace it to you — capped at 5 emails/day | 2026-10-10 |
+| 4 | [WhatsMyName](tools/whatsmyname.md) | Community-maintained JSON dataset of 700+ sites answering "does this username exist?" — the data layer behind most username checkers | 2026-10-10 |
+| 3 | [Intelligence X (intelx.io)](tools/intelx.md) | Freemium OSINT search engine over 200 billion+ records — breaches, stealer logs, pastes, darknet, historical web — searched by **selector**, not keyword | 2026-10-10 |
+| 2 | [lucky-cat-api + radio-house-api](tools/ai-api-bridge.md) | Two local FastAPI bridges wrapping free AI chat sites (Proton Lumo, TryingOpen) into one OpenAI-compatible endpoint — ~24 models from a `baseURL` swap | 2026-10-10 |
+| 1 | [SmailPro — temporary Gmail & Outlook inboxes](tools/smailpro.md) | Disposable inboxes on **real Gmail and Outlook addresses**, which clears the domain blocklists that silently kill ordinary temp-mail verification | 2026-10-10 |
+
+**A new entry always goes at the top**, with the next number up. The website index is sorted the same way — newest first — so the two stay in step.
 
 *Each entry page carries a `Summary` line; the website index is built from those lines. Entries marked **हिंदी** on the site also have a Hindi translation.*
 

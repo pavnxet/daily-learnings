@@ -18,7 +18,7 @@ A daily log of new learnings from routine work and new tools explored. Not a wik
 - **File skeleton**: What it is → Why it matters → How to use (free path first, API for automation) → Limits & risks → Verdict.
 - **Always link the source URL** so the claim can be re-checked later.
 - **Separate vendor claims from verified facts.** Mark anything taken from a vendor's own marketing as `(vendor claim — unverified)`. Do not restate it as fact.
-- **New entry ⇒ add one line to the README table** and log it in [./learning/summary.md](./learning/summary.md).
+- **New entry ⇒ add it to the TOP of the README table** (newest first) and log it in [./learning/summary.md](./learning/summary.md).
 - Categories beyond `tools/` get their own top-level folder and one README row per entry.
 - **After any change to `tools/` or `README.md`, run `python generate.py`** to rebuild `docs/`. Never hand-edit anything in `docs/` — it is generated output.
 
@@ -72,7 +72,7 @@ Use `web_search` to find candidates and `web_fetch` to read the actual pages —
 ### 4. Close the loop
 
 1. Create the file in `tools/`, add its `Summary` line.
-2. Add a numbered row to the **Index** table in `README.md`, and add the entry to the `What's in here`/index lists if the count changes.
+2. **Add the new row to the TOP of the Index table in `README.md`,** under the `|---|` separator, with the next number up. The table is **newest first** and the site index is sorted the same way, so the latest entry is the first thing seen on both GitHub and the website. Never append to the bottom.
 3. Write the Hindi translation as `tools/<slug>.hi.md` (see below).
 4. Run `python generate.py` and confirm it reports the expected number of pages **and translations**.
 5. Append a dated entry to [./learning/summary.md](./learning/summary.md).

@@ -117,19 +117,47 @@ THEME_JS = """
 """
 
 INLINE = [
-    (re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)"), r'<a href="\2">\1</a>'),
-    (re.compile(r"\*\*([^*]+)\*\*"), r"<strong>\1</strong>"),
-    (re.compile(r"(?<![\w*])\*([^*\n]+)\*(?![\w*])"), r"<em>\1</em>"),
+    # Code spans first: they are verbatim and must not be re-parsed. `inline()`
+    # stashes the result of this first pattern so later ones cannot reach inside.
     (re.compile(r"`([^`]+)`"), r"<code>\1</code>"),
+    (re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)"), r'<a href="\2">\1</a>'),
+    # Bold runs before italics: `**` is the more specific marker. The content
+    # alternation allows a stray `*` inside, so `**bold with *italics* in it**`
+    # still becomes <strong> instead of being skipped. A plain `[^*]+` failed
+    # those, silently leaving literal ** in the output.
+    (re.compile(r"\*\*((?:[^*]|\*(?!\*))+)\*\*"), r"<strong>\1</strong>"),
+    (re.compile(r"(?<![\w*])\*([^*\n]+)\*(?![\w*])"), r"<em>\1</em>"),
     (re.compile(r"\((vendor claim[^)]*)\)"), r"<strong>(\1)</strong>"),
 ]
 
 
 def inline(text):
-    """Escape first, then apply inline markdown so entities survive."""
+    """Escape first, then apply inline markdown so entities survive.
+
+    Each completed span is lifted into a placeholder before the next pattern
+    runs, so later patterns cannot reach inside it. Without this, `` `a **b**` ``
+    becomes <code>a <strong>b</strong></code> -- bold inside a code span, which
+    is wrong. Code spans therefore go first.
+
+    shortcut: emphasis is not parseable inside a link label or a code span, and
+    a doubled code span (`` `x` ``) is not handled; a full single-pass tokenizer
+    would be needed, and no entry does either yet.
+    """
     out = html.escape(text, quote=False)
-    for pattern, repl in INLINE:
-        out = pattern.sub(repl, out)
+    stashed = []
+
+    def stash(match):
+        """Apply this pattern, then lift the result out of reach of the rest."""
+        span = match.expand(INLINE[0][1])
+        stashed.append(span)
+        return f"\x00{len(stashed) - 1}\x00"
+
+    for i, (pattern, repl) in enumerate(INLINE):
+        # Code spans are verbatim: converted, then stashed so no later pattern
+        # can rewrite the text inside <code>.
+        out = pattern.sub(stash if i == 0 else repl, out)
+    for i, span in enumerate(stashed):
+        out = out.replace(f"\x00{i}\x00", span)
     return out
 
 

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>yt-slidesnap — लेक्चर वीडियो को उसकी स्लाइड्स के PDF में बदलें</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.page-head .m{margin:0}
+.langs{margin:.5rem 0 0;font-size:.9rem;color:var(--muted)}
+.langs strong{color:var(--fg)}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>yt-slidesnap — लेक्चर वीडियो को उसकी स्लाइड्स के PDF में बदलें</h1><p class="m">2026-10-10 &nbsp;·&nbsp; <a href="https://github.com/pavnxet/yt-slidesnap">साइट देखें</a></p><p class="langs"><a href="yt-slidesnap.html">English</a> · <strong>हिंदी</strong></p></div><div class="entry"><h2>यह क्या है</h2>
+<p>एक Python CLI (और एक छोटा लोकल वेब UI) जो एक वीडियो URL और उन टाइमस्टैम्प के साथ लिया जाता है जहाँ स्लाइड्स दिखती हैं, और <strong>हर पेज पर एक स्लाइड वाला साफ़ PDF</strong> लौटाता है। यह वीडियो डाउनलोड नहीं करता — स्ट्रीम रिज़ॉल्व करता है और सिर्फ़ ज़रूरी फ़्रेम निकालता है।</p>
+<p>बनाया गया एक ख़ास उबाऊ काम के लिए: ढाई घंटे की रिकॉर्डेड क्लास जिसमें 40 सवाल हों, और आपको टाइमलाइन हाथ से स्क्रब करने के बजाय सवालों की स्लाइड्स एक दस्तावेज़ में चाहिए। हर पेज पर कैप्शन (<code>[Q22 at 1:34:21]</code>) आता है और टूल साफ़-साफ़ छापता है कि उसने आपके टाइमस्टैम्प कैसे पढ़े — यानी ग़लत पढ़ा गया तो log में दिखेगा, चुपचाप PDF में नहीं।</p>
+<h2>यह क्यों मायने रखता है</h2>
+<p>दिलचस्प हिस्सा PDF नहीं है — <strong>यह है कि फ़्रेम बिना किसी ML के साफ़ कैसे निकलते हैं।</strong></p>
+<p>किसी टाइमस्टैम्प पर सीधे फ़्रेम उठाने से आमतौर पर स्लाइड के सामने खड़ा प्रेज़ेंटर कैद हो जाता है। यहाँ हल एक सांख्यिकीय तरकीब है जिसकी लागत शून्य है:</p>
+<ul><li>हर स्लाइड विंडो से एक ही ffmpeg पास में <strong>8 बार</strong> सैंपल लिया जाता है।</li><li>आठों फ़्रेम stack किए जाते हैं और <strong>per-pixel median</strong> निकाला जाता है।</li><li>स्लाइड स्थिर है; प्रेज़ेंटर नहीं। तो median <strong>वह स्लाइड है जिसमें से प्रेज़ेंटर मिट चुका है</strong>।</li><li>उस median के सबसे क़रीब वाला candidate (सबसे कम mean absolute deviation) वह फ़्रेम है जिसमें वे उसे सबसे कम ढकते हैं।</li></ul>
+<p>न मशीन लर्निंग, न फ़ेस डिटेक्शन — बस stack पर <code>numpy.median</code>। यही पूरा विचार है, और यह किसी भी "स्थिर बैकग्राउंड से हिलती चीज़ हटाओ" समस्या के लिए सचमुच दोबारा इस्तेमाल लायक पैटर्न है।</p>
+<p>दो और डिज़ाइन फ़ैसले चुराने लायक हैं:</p>
+<ul><li><strong>सैंपलिंग अगली row नहीं, बल्कि <em>सबसे पहले</em> आने वाले बाद के टाइमस्टैम्प तक सीमित है।</strong> पार्सर में <code>min(later)</code> का मतलब है कि विंडो कभी जवाब के दिखने से आगे नहीं बढ़ सकती, यानी जवाब PDF में लीक नहीं हो सकता और विंडो अगले सवाल पर नहीं सरक सकती। एक नकारात्मक शर्त जो उम्मीद पर नहीं, गणित पर टिकी है।</li><li><strong>हर candidate फ़्रेम सहेजा जाता है</strong>, इसलिए फिर से चुनना मुफ़्त है — <code>--override Q22=5</code> किसी एक candidate को बिना दोबारा extraction पिन कर देता है।</li></ul>
+<h2>इस्तेमाल कैसे करें</h2>
+<h3>इंस्टॉल</h3>
+<pre><code>pipx install git+https://github.com/pavnxet/yt-slidesnap   # yt-slidesnap कमांड देता है
+# या
+pip install git+https://github.com/pavnxet/yt-slidesnap</code></pre>
+<p>clone से करना हो: <code>pip install -r requirements.txt</code>, फिर <code>python slidesnap.py ...</code> चलाएँ — <strong>उस रास्ते पर <code>yt-slidesnap</code> कमांड मौजूद नहीं होता</strong>, जब तक <code>pip install -e .</code> न चलाएँ। README इसे सबसे आम गड़बड़ बताता है।</p>
+<p>आपको ffmpeg इंस्टॉल करने की <strong>ज़रूरत नहीं</strong>। पूरा build <code>imageio-ffmpeg</code> के अंदर आता है और टूल हमेशा वही इस्तेमाल करता है (<code>FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()</code>). स्ट्रीम <code>yt-dlp</code> रिज़ॉल्व करता है।</p>
+<h3>चलाएँ</h3>
+<p>टाइमस्टैम्प लगभग जैसे आपके पास पहले से हैं, वैसे ही चिपका सकते हैं:</p>
+<pre><code>Q22: Question 01:34:21 | Answer 01:34:53 (C)
+Q23: Question 01:38:45 | Answer 01:39:16 (D)</code></pre>
+<p>Markdown tables भी चलती हैं, जिनमें एक row में कई बाद के टाइमस्टैम्प हों। फिर:</p>
+<pre><code>yt-slidesnap run &quot;&lt;video-url&gt;&quot; --file timestamps.txt
+yt-slidesnap run &quot;&lt;video-url&gt;&quot; --text &quot;Q22: Question 01:34:21 | Answer 01:34:53 (C)&quot;
+cat timestamps.txt | yt-slidesnap run &quot;&lt;video-url&gt;&quot;</code></pre>
+<p><strong>पूरा run ख़र्च करने से पहले जाँचें:</strong></p>
+<pre><code>yt-slidesnap run &quot;&lt;url&gt;&quot; --file timestamps.txt --dry-run</code></pre>
+<p>यह पढ़ी गई विंडो छापकर (<code>Q19  1:41:04 -&gt; 1:41:27  23s</code>) बिना extraction बाहर निकल जाता है। हर असली extraction भी वही विंडो छापता है जो उसने समझी।</p>
+<h3>वेब UI</h3>
+<pre><code>yt-slidesnap serve      # http://127.0.0.1:8765 खोलता है</code></pre>
+<p>URL और टाइमस्टैम्प चिपकाएँ, Extract दबाएँ, प्रोग्रेस देखें, फिर PDF लिंक और contact-sheet प्रीव्यू मिलता है। डिफ़ॉल्ट रूप से <code>127.0.0.1</code> पर बँधता है; एक बार में एक ही run (दूसरा क्लिक 409 के साथ रिजेक्ट होता है, क़तार में नहीं लगता)।</p>
+<h3>काम के flags</h3>
+<table><thead><tr><th>Flag</th><th>डिफ़ॉल्ट</th><th>काम</th></tr></thead><tbody><tr><td><code>--frames N</code></td><td><code>8</code></td><td>प्रति स्लाइड candidates — pick गंदे लगें तो बढ़ाएँ</td></tr><tr><td><code>--override ID=N</code></td><td>—</td><td>एक स्लाइड के लिए candidate N पिन करें, दोहराया जा सकता है</td></tr><tr><td><code>--workers N</code></td><td><code>4</code></td><td>एक साथ कितनी स्लाइड्स निकलें</td></tr><tr><td><code>--dry-run</code></td><td>off</td><td>पढ़े गए टाइमस्टैम्प दिखाएँ, कुछ न निकालें</td></tr><tr><td><code>--no-label</code> / <code>--no-watermark</code></td><td>off</td><td>कैप्शन / फ़ुटर स्ट्रिप हटाएँ</td></tr><tr><td><code>--client NAME</code></td><td><code>android</code></td><td>YouTube के लिए yt-dlp <code>player_client</code></td></tr></tbody></table>
+<h3>आउटपुट</h3>
+<pre><code>slidesnap-out/&lt;video-id&gt;/
+├── Q22-Q37.pdf        हर पेज पर एक कैप्शन वाली स्लाइड
+├── auto_picked.png    हर pick का contact sheet — पहले यही देखें
+├── frames/Q22.png     चुनी गई स्लाइड्स
+└── candidates/        प्रति स्लाइड सभी 8 candidates, दोबारा चुनने के लिए</code></pre>
+<h2>सीमाएँ और जोखिम</h2>
+<ul><li><strong>YouTube पर आउटपुट 640×360 तक सीमित है, और यह बग नहीं, सख़्त बाधा है।</strong> README और कोड की टिप्पणी दोनों बताते हैं कि YouTube का <code>android</code> client ही अकेला ऐसा है जो ffmpeg को असल में फ़ेच होने लायक URL देता है, और वह client 360p पर रुक जाता है। इससे ऊपर जाने के लिए yt-dlp की <code>nsig</code> हैंडलिंग के लिए JS runtime चाहिए, और फिर भी उस client का URL <strong>HTTP 403</strong> दे सकता है (स्ट्रीम URL उसी client से बँधा होता है जिसने माँगा)। PDF लिखते समय टूल 2× upscale करता है। स्लाइड के टेक्स्ट के लिए ठीक; छोटे लेबल वाले diagram के लिए नहीं।</li><li><strong>यह किसी और के वीडियो के फ़्रेम डाउनलोड करता है।</strong> README यह साफ़ कहता है: पढ़ाई के नोट्स और fair-use quotation के लिए ठीक, लेक्चर दोबारा प्रकाशित करने के लिए नहीं। आउटपुट फ़ोल्डर डिफ़ॉल्ट से gitignored है — ऐसा ही रखें, और कुछ भी साझा करने से पहले प्लेटफ़ॉर्म की शर्तें और वीडियो के मालिक का हक़ देखें। यही सबसे ज़रूरी बात है; टूल यह आपके लिए लागू नहीं कर सकता।</li><li><strong>Age-restricted या members-only वीडियो के लिए cookies</strong> एक्सपोर्ट करके yt-dlp को देने पड़ते हैं, वरना स्ट्रीम रिज़ॉल्व ही नहीं होगा (<code>could not resolve a stream URL</code>)।</li><li><strong>प्रति टाइमस्टैम्प एक फ़्रेम।</strong> अगर स्लाइड animation से बनती है, तो जो उस पल स्क्रीन पर है वही मिलेगा — "पूरी बनी स्लाइड ढूँढो" जैसा कोई तर्क नहीं है।</li><li><strong>Median तरकीब तब फेल होती है जब विंडो के अंदर स्लाइड ख़ुद बदल जाए।</strong> तब median दो स्लाइड्स का मिश्रण बनता है और <em>हर</em> candidate ख़राब स्कोर करता है। यह चुपचाप नहीं, पकड़ में आता है: <code>error X vs worst Y</code> वाला आउटपुट इसे दिखाता है — अगर <code>X</code> और <code>Y</code> क़रीब हैं तो सभी candidates गंदे थे और <code>--frames</code> बढ़ाना चाहिए। कम भरोसे वाले pick पर आँख बंद कर भरोसा करना ही असली फेलियर है।</li><li><strong>सिर्फ़ YouTube अंत से अंत तक टेस्टेड है</strong>, हालाँकि यह हर उस चीज़ पर चलता है जिसे <code>yt-dlp</code> सपोर्ट करता है।</li><li><strong>वेब UI में कोई ऑथेंटिकेशन नहीं।</strong> यह सिर्फ़ मौजूदा run का आउटपुट फ़ोल्डर सर्व करता है, बनावट से सिंगल-यूज़र है, और loopback पर बँधता है। इसे ऐसे नेटवर्क पर न खोलें जिस पर भरोसा न हो — साझा नेटवर्क पर <code>--host 0.0.0.0</code> आपके निकाले फ़्रेम सबको दे देगा। दूसरे क्लिक पर 409 का मतलब है क़तार नहीं, यानी यह कई यूज़र के लिए नहीं बना।</li><li><strong>रफ़्तार का आँकड़ा ख़ुद बताया हुआ दावा है।</strong> "16 slides in ~25 seconds" प्रोजेक्ट के अपने README से है और यहाँ स्वतंत्र रूप से नापा नहीं गया। इसे संकेत मानें, बेंचमार्क नहीं।</li></ul>
+<h2>निष्कर्ष</h2>
+<p><strong>छोटा, साफ़-सीमा वाला, और एक उपयोगिता के लिए असामान्य रूप से अच्छी तरह तर्क दिया हुआ — ऐसा टूल जिसका README बताता है कि <em>क्यों</em> काम करता है, सिर्फ़ क्या टाइप करना है नहीं।</strong></p>
+<p><strong>इसके लिए इस्तेमाल करें</strong>: रिकॉर्ड किए गए लेक्चर या वेबिनार को खोजने और टिप्पणी करने लायक स्लाइड दस्तावेज़ में बदलने के लिए, परीक्षा-रिवीज़न रिकॉर्डिंग से सवालों की स्लाइड्स निकालने के लिए, और स्थिर दृश्य से हिलते व्यक्ति को हटाने वाली median तरकीब के संदर्भ कार्यान्वयन के तौर पर।</p>
+<p><strong>इसके लिए न करें</strong>: किसी और का लेक्चर दोबारा प्रकाशित करना, 360p से बेहतर बारीक़ी चाहने वाला कुछ भी, या ऐसी animated slides जहाँ आपको स्लाइड की पूरी बनी हालत चाहिए।</p>
+<p><strong>ईमानदार ढाँचा</strong>: क़ीमत कोड की मात्रा में नहीं, दो फ़ैसलों में है — per-pixel median (बिना ML साफ़ फ़्रेम) और earliest-ceiling विंडो नियम (जवाब बनावट से लीक नहीं हो सकते)। दोनों ऐसी चीज़ें हैं जो पीछे से देखकर साफ़ लगती हैं और ग़लत करना आसान है, और टूल की अपनी logging (<code>error X vs worst Y</code>, छपी हुई विंडो) ही ग़लत मामलों को चुपचाप होने के बजाय दिखने लायक बनाती है।</p>
+<h2>स्रोत</h2>
+<ul><li><a href="https://github.com/pavnxet/yt-slidesnap">yt-slidesnap on GitHub</a> — https://github.com/pavnxet/yt-slidesnap</li><li><a href="https://github.com/pavnxet/yt-slidesnap/blob/main/README.md">README</a> — https://github.com/pavnxet/yt-slidesnap/blob/main/README.md</li><li><a href="https://github.com/pavnxet/yt-slidesnap/blob/main/slidesnap.py">slidesnap.py सोर्स</a> — https://github.com/pavnxet/yt-slidesnap/blob/main/slidesnap.py</li><li><a href="https://github.com/pavnxet/yt-slidesnap/blob/main/examples/timestamps.txt">examples/timestamps.txt</a> — https://github.com/pavnxet/yt-slidesnap/blob/main/examples/timestamps.txt</li><li><a href="https://pypi.org/project/imageio-ffmpeg/">imageio-ffmpeg (साथ आता ffmpeg build)</a> — https://pypi.org/project/imageio-ffmpeg/</li><li><a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a> — https://github.com/yt-dlp/yt-dlp</li></ul>
+<p><em>सत्यापन नोट: README, <code>slidesnap.py</code> और examples फ़ाइल रेपो से पढ़ी गईं। तंत्र से जुड़े दावे README से लेने के बजाय सोर्स से जाँचे गए: <code>autopick()</code> candidate फ़्रेम stack करके <code>np.median(stack, axis=0)</code> से mean absolute deviation का <code>argmin</code> लौटाता है; <code>extract_window()</code> ffmpeg के <code>-vf fps=k/span</code> से सैंपल करता है; और पार्सर विंडो का अंत <code>min(later)</code> — यानी सबसे पहले आने वाला बाद का टाइमस्टैम्प — रखता है, जो पुष्टि करता है कि जवाब तक पहुँचा नहीं जा सकता। कोई run नहीं चलाया गया, इसलिए आउटपुट की गुणवत्ता, ~25 सेकंड का आँकड़ा और PDF का लेआउट असत्यापित हैं।</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

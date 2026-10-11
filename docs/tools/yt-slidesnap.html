@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>yt-slidesnap — turn a lecture video into a PDF of its slides</title>
+<meta name="description" content="Daily learnings and tools explored.">
+<script>
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+}
+/* explicit choice beats the system preference; equal specificity, so these must come after */
+[data-theme=light]{ --bg:#fff; --fg:#1a1a1a; --muted:#6b6b6b; --rule:#e6e6e6; --link:#0b5cad; --card:#fafafa; }
+[data-theme=dark]{ --bg:#141414; --fg:#e8e8e8; --muted:#9a9a9a; --rule:#2e2e2e; --link:#6fb3ff; --card:#1c1c1c; }
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:10;cursor:pointer;
+  font:inherit;font-size:.8rem;line-height:1;padding:.5rem .75rem;border-radius:999px;
+  color:var(--muted);background:var(--card);border:1px solid var(--rule)}
+.theme-toggle:hover{color:var(--fg);border-color:var(--link)}
+.theme-toggle:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media print{.theme-toggle{display:none}}
+.wrap{max-width:46rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{margin-bottom:2.5rem}
+header.site h1{font-size:1.9rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.02em}
+header.site p{color:var(--muted);margin:0}
+header.site nav{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+header.site nav a{margin-right:1rem}
+h2{font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+   font-weight:600;margin:2.5rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+h3{font-size:1.15rem;margin:2rem 0 .5rem}
+/* entry pages: the first section heading already sits next to the page title */
+.entry>h2:first-child{font-size:1.15rem;letter-spacing:normal;text-transform:none;
+  color:var(--fg);margin-top:0;border-bottom:0;padding-bottom:0}
+ul,ol{padding-left:1.3rem}
+li{margin:.35rem 0}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.1em .35em}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;
+    padding:1rem;overflow-x:auto}
+pre code{background:none;border:0;padding:0;font-size:.85rem;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.93rem}
+th,td{border:1px solid var(--rule);padding:.5rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--card);font-weight:600}
+blockquote{margin:1rem 0;padding-left:1rem;border-left:3px solid var(--rule);color:var(--muted)}
+hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+/* index cards */
+.card{display:block;padding:1.1rem 1.2rem;margin:.9rem 0;border:1px solid var(--rule);
+      border-radius:10px;background:var(--card);color:inherit}
+.card:hover{border-color:var(--link);text-decoration:none}
+.card .t{font-weight:600;font-size:1.05rem}
+.card .d{color:var(--muted);font-size:.94rem;margin:.35rem 0 0}
+.card .m{color:var(--muted);font-size:.8rem;margin-top:.6rem;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{color:var(--muted);font-style:italic}
+footer.site{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+            color:var(--muted);font-size:.88rem}
+.page-head{margin-bottom:2rem}
+.page-head h1{font-size:1.7rem;line-height:1.25;margin:0 0 .4rem;letter-spacing:-.02em}
+.page-head .m{margin:0}
+.langs{margin:.5rem 0 0;font-size:.9rem;color:var(--muted)}
+.langs strong{color:var(--fg)}
+.back{font-size:.88rem}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-live="polite"></button>
+<div class="wrap">
+<p class="back"><a href="https://pavnxet.github.io/daily-learnings/">← All learnings</a> &nbsp;·&nbsp; <a href="https://github.com/pavnxet/daily-learnings">Source on GitHub</a></p>
+<div class="page-head"><h1>yt-slidesnap — turn a lecture video into a PDF of its slides</h1><p class="m">2026-10-10 &nbsp;·&nbsp; <a href="https://github.com/pavnxet/yt-slidesnap">visit site</a></p><p class="langs"><strong>English</strong> · <a href="yt-slidesnap.hi.html">हिंदी</a></p></div><div class="entry"><h2>What it is</h2>
+<p>A Python CLI (and a small local web UI) that takes a video URL plus the timestamps where slides appear, and returns <strong>a clean PDF with one slide per page</strong>. It does not download the video — it resolves the stream and extracts only the frames it needs.</p>
+<p>Built for a specific tedious case: a 2.5-hour recorded class with 40 questions in it, where you want the question slides as a document instead of scrubbing a timeline by hand. Output is captioned (<code>[Q22 at 1:34:21]</code>) and the tool prints exactly how it interpreted your timestamps, so a misread shows up in the log rather than silently in the PDF.</p>
+<h2>Why it matters</h2>
+<p>The interesting part is not the PDF — it is <strong>how the frames come out clean without any ML</strong>.</p>
+<p>Naively grabbing a frame at a timestamp usually catches the presenter standing in front of the slide. The fix here is a statistical trick that costs nothing:</p>
+<ul><li>Each slide window is sampled <strong>8 times</strong> by one ffmpeg pass.</li><li>The 8 frames are stacked and a <strong>per-pixel median</strong> is computed.</li><li>The slide is static; the presenter is not. So the median <strong>is the slide with the presenter erased</strong>.</li><li>The candidate closest to that median (lowest mean absolute deviation) is the frame where they cover it least.</li></ul>
+<p>No machine learning, no face detection — just <code>numpy.median</code> over the stack. That is the whole idea, and it is a genuinely reusable pattern for any "remove the moving thing from a static background" problem.</p>
+<p>Two other design decisions are worth stealing:</p>
+<ul><li><strong>Sampling is bounded by the <em>earliest</em> later timestamp</strong>, not the next row. <code>min(later)</code> in the parser means the window can never extend past the answer's appearance, so an answer cannot leak into the PDF and the window cannot drift across the next question. A negative constraint enforced by the arithmetic rather than by hope.</li><li><strong>Every candidate frame is kept</strong>, so re-picking costs nothing — <code>--override Q22=5</code> pins a specific candidate without re-running extraction.</li></ul>
+<h2>How to use</h2>
+<h3>Install</h3>
+<pre><code>pipx install git+https://github.com/pavnxet/yt-slidesnap   # gives the yt-slidesnap command
+# or
+pip install git+https://github.com/pavnxet/yt-slidesnap</code></pre>
+<p>From a clone instead: <code>pip install -r requirements.txt</code>, then run <code>python slidesnap.py ...</code> — <strong>the <code>yt-slidesnap</code> command does not exist on that path</strong> unless you also run <code>pip install -e .</code>. The README calls this the single most common trip-up.</p>
+<p>You do <strong>not</strong> need ffmpeg installed. A full build ships inside <code>imageio-ffmpeg</code> and the tool always uses that one (<code>FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()</code>). <code>yt-dlp</code> resolves the stream.</p>
+<h3>Run it</h3>
+<p>Timestamps can be pasted almost however you already have them:</p>
+<pre><code>Q22: Question 01:34:21 | Answer 01:34:53 (C)
+Q23: Question 01:38:45 | Answer 01:39:16 (D)</code></pre>
+<p>Markdown tables work too, including several later timestamps per row. Then:</p>
+<pre><code>yt-slidesnap run &quot;&lt;video-url&gt;&quot; --file timestamps.txt
+yt-slidesnap run &quot;&lt;video-url&gt;&quot; --text &quot;Q22: Question 01:34:21 | Answer 01:34:53 (C)&quot;
+cat timestamps.txt | yt-slidesnap run &quot;&lt;video-url&gt;&quot;</code></pre>
+<p><strong>Check before spending a run:</strong></p>
+<pre><code>yt-slidesnap run &quot;&lt;url&gt;&quot; --file timestamps.txt --dry-run</code></pre>
+<p>This prints the parsed windows (<code>Q19  1:41:04 -&gt; 1:41:27  23s</code>) and exits without extracting. Every real extraction also prints the window it understood.</p>
+<h3>Web UI</h3>
+<pre><code>yt-slidesnap serve      # opens http://127.0.0.1:8765</code></pre>
+<p>Paste URL + timestamps, click Extract, watch progress, then get a PDF link and a contact-sheet preview. Binds to <code>127.0.0.1</code> by default; one run at a time (a second click is rejected with 409, not queued).</p>
+<h3>Flags worth knowing</h3>
+<table><thead><tr><th>Flag</th><th>Default</th><th>Use</th></tr></thead><tbody><tr><td><code>--frames N</code></td><td><code>8</code></td><td>candidates per slide — raise it if picks look dirty</td></tr><tr><td><code>--override ID=N</code></td><td>—</td><td>pin candidate N for one slide, repeatable</td></tr><tr><td><code>--workers N</code></td><td><code>4</code></td><td>concurrent slide extraction</td></tr><tr><td><code>--dry-run</code></td><td>off</td><td>show parsed timestamps, extract nothing</td></tr><tr><td><code>--no-label</code> / <code>--no-watermark</code></td><td>off</td><td>drop the caption / footer strip</td></tr><tr><td><code>--client NAME</code></td><td><code>android</code></td><td>yt-dlp <code>player_client</code> for YouTube</td></tr></tbody></table>
+<h3>Output</h3>
+<pre><code>slidesnap-out/&lt;video-id&gt;/
+├── Q22-Q37.pdf        one captioned slide per page
+├── auto_picked.png    contact sheet of every pick — eyeball this first
+├── frames/Q22.png     the chosen slides
+└── candidates/        all 8 candidates per slide, for re-picking</code></pre>
+<h2>Limits &amp; risks</h2>
+<ul><li><strong>YouTube output is capped at 640×360, and that is a hard constraint, not a bug.</strong> The README and a code comment both note that YouTube's <code>android</code> client is the only one that hands ffmpeg a URL it can actually fetch, and that client caps at 360p. Going higher needs a JS runtime for yt-dlp's <code>nsig</code> handling, and that client's URL may still return <strong>HTTP 403</strong> (the stream URL is locked to the client that requested it). The tool upscales 2× when writing the PDF. Fine for slide text; not fine for a diagram with small labels.</li><li><strong>It downloads frames of someone else's video.</strong> The README says this plainly: fine for study notes and fair-use quotation, not fine for republishing a lecture. The output folder is gitignored by default — keep it that way, and check the platform's terms and the rights holder before sharing. This is the main thing to get right; the tool cannot enforce it for you.</li><li><strong>Age-restricted or members-only videos need cookies</strong> exported and passed to yt-dlp, or stream resolution fails outright (<code>could not resolve a stream URL</code>).</li><li><strong>One frame per timestamp.</strong> If a slide is built up with animation, you get whatever is on screen at that instant — there is no "find the completed slide" logic.</li><li><strong>The median trick fails if the slide itself changes inside the window.</strong> Then the median is a blend of two slides and <em>every</em> candidate scores badly. This is detectable rather than silent: the <code>error X vs worst Y</code> output shows it — if <code>X</code> is close to <code>Y</code>, every candidate was dirty and you should raise <code>--frames</code>. Blindly trusting a low-confidence pick is the realistic failure mode.</li><li><strong>Only YouTube is tested end to end</strong>, though it works with anything <code>yt-dlp</code> supports.</li><li><strong>The web UI has no authentication.</strong> It serves the current run's output folder and nothing else, is single-user by design, and binds to loopback. Do not expose it to a network you do not trust — <code>--host 0.0.0.0</code> on a shared network hands out your extracted frames. The 409-on-second-click means no queuing, so it is not built for multiple users.</li><li><strong>The speed figure is a self-reported claim.</strong> "16 slides in ~25 seconds" comes from the project's own README and was not independently measured here. Treat it as an indication, not a benchmark.</li></ul>
+<h2>Verdict</h2>
+<p><strong>Small, sharply-scoped, and unusually well-argued for a utility — the kind of tool where the README explains <em>why</em> it works rather than just what to type.</strong></p>
+<p><strong>Use it for</strong>: turning recorded lectures or webinars into a slide document you can search and annotate, pulling the question slides out of an exam-review recording, and as a reference implementation of the median trick for removing a moving person from a static scene.</p>
+<p><strong>Do not use it for</strong>: republishing someone else's lecture, anything needing better than 360p detail, or animated builds where you need the completed state of a slide.</p>
+<p><strong>The honest framing</strong>: the value is in two decisions, not the code volume — the per-pixel median (clean frames with no ML) and the earliest-ceiling window rule (answers structurally cannot leak). Both are the kind of thing that is obvious in hindsight and easy to get wrong, and the tool's own logging (<code>error X vs worst Y</code>, the printed window) is what makes the wrong cases visible instead of silent.</p>
+<h2>Sources</h2>
+<ul><li><a href="https://github.com/pavnxet/yt-slidesnap">yt-slidesnap on GitHub</a> — https://github.com/pavnxet/yt-slidesnap</li><li><a href="https://github.com/pavnxet/yt-slidesnap/blob/main/README.md">README</a> — https://github.com/pavnxet/yt-slidesnap/blob/main/README.md</li><li><a href="https://github.com/pavnxet/yt-slidesnap/blob/main/slidesnap.py">slidesnap.py source</a> — https://github.com/pavnxet/yt-slidesnap/blob/main/slidesnap.py</li><li><a href="https://github.com/pavnxet/yt-slidesnap/blob/main/examples/timestamps.txt">examples/timestamps.txt</a> — https://github.com/pavnxet/yt-slidesnap/blob/main/examples/timestamps.txt</li><li><a href="https://pypi.org/project/imageio-ffmpeg/">imageio-ffmpeg (bundled ffmpeg build)</a> — https://pypi.org/project/imageio-ffmpeg/</li><li><a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a> — https://github.com/yt-dlp/yt-dlp</li></ul>
+<p><em>Verification note: the README, <code>slidesnap.py</code> and the examples file were read from the repository. The mechanism claims were checked against the source rather than taken from the README: <code>autopick()</code> stacks the candidate frames and returns <code>argmin</code> of the mean absolute deviation from <code>np.median(stack, axis=0)</code>; <code>extract_window()</code> samples with ffmpeg's <code>-vf fps=k/span</code>; and the parser sets the window end to <code>min(later)</code> — the earliest later timestamp — confirming that an answer cannot be reached. No run was performed, so output quality, the ~25-second figure and PDF layout are unverified.</em></p></div>
+<footer class="site">
+  <p><a href="https://github.com/pavnxet/daily-learnings">GitHub</a> · <a href="https://github.com/pavnxet/daily-learnings/blob/main/README.md">README</a> · built from markdown, no framework.</p>
+</footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  function isDark(){
+    var t=root.dataset.theme;
+    if(t) return t==='dark';
+    return matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+  function label(){
+    var dark=isDark();
+    btn.textContent=dark? '\u2600 Light':'\u263D Dark';
+    btn.setAttribute('aria-label','Switch to '+(dark?'light':'dark')+' theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=isDark()? 'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('theme',next)}catch(e){}
+    label();
+  });
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',label);
+  label();
+})();
+</script>
+</body>
+</html>

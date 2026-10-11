@@ -22,6 +22,7 @@ New things learned from daily routine, and new tools explored. One page per entr
 
 | # | Entry | What it is | Logged |
 |---|---|---|---|
+| 7 | [yt-slidesnap](tools/yt-slidesnap.md) | Turn a lecture video into a PDF of its slides — no video download, and it picks the frame where the presenter isn't blocking the slide using a per-pixel median, no ML | 2026-10-10 |
 | 6 | [Face Detection & Comparison demo](tools/face-comparison-demo.md) | Browser demo comparing two uploaded faces — a teaching example of the detect → align → embed → compare pipeline | 2026-10-10 |
 | 5 | [ProxyNova anonymous email](tools/proxynova-anonymous-email.md) | No-signup web form that mails anyone from a rotating sender pool, so the recipient cannot trace it to you — capped at 5 emails/day | 2026-10-10 |
 | 4 | [WhatsMyName](tools/whatsmyname.md) | Community-maintained JSON dataset of 700+ sites answering "does this username exist?" — the data layer behind most username checkers | 2026-10-10 |
